@@ -21,7 +21,7 @@ export default function UserLocationMarker({ position, isFirstFix }: UserLocatio
       markerRef.current.setLatLng(position);
     } else {
       markerRef.current = L.circleMarker(position, {
-        radius: 8,
+        radius: 12,
         fillColor: config.userLocationColor,
         color: config.userLocationPulseColor,
         weight: 3,
