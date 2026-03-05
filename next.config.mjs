@@ -21,7 +21,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https://*.tile.openstreetmap.org",
               "connect-src 'self' https://vitals.vercel-insights.com",
-              "frame-src https://googleads.g.doubleclick.net",
+              "frame-src https://googleads.g.doubleclick.net https://vercel.live",
             ].join("; "),
           },
         ],
