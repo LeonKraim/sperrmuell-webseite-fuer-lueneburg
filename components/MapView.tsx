@@ -33,7 +33,7 @@ export default function MapView({ onDataLoaded, onLoadingChange, selectedFeature
   if (error) {
     return (
       <div className="flex h-full items-center justify-center bg-gray-100">
-        <p className="text-gray-500">Data unavailable. Please try again later.</p>
+        <p className="text-gray-500">Daten nicht verfügbar. Bitte versuchen Sie es später erneut.</p>
       </div>
     );
   }
