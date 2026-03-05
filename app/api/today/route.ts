@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getGeoJsonData } from "@/lib/dataCache";
 import { filterByDate } from "@/lib/geojson";
 import { tomorrowAsGermanDateString } from "@/lib/dateUtils";
+import { getOverrideFromParams } from "@/lib/dateOverride";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import logger from "@/lib/logger";
 import crypto from "crypto";
@@ -17,8 +18,11 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    const { searchParams } = new URL(request.url);
+    const override = getOverrideFromParams(searchParams);
+
     const data = await getGeoJsonData();
-    const tomorrowStr = tomorrowAsGermanDateString();
+    const tomorrowStr = tomorrowAsGermanDateString(override);
 
     logger.info("Filtering by date", { dateString: tomorrowStr });
     const filtered = filterByDate(data, tomorrowStr);
