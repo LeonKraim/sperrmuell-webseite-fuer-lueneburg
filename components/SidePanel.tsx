@@ -13,9 +13,16 @@ interface SidePanelProps {
   isLoading: boolean;
   userPosition: [number, number] | null;
   onStreetClick?: (feature: WasteFeature) => void;
+  onMobileStateChange?: (state: "hidden" | "peek" | "full") => void;
 }
 
-export default function SidePanel({ features, isLoading, userPosition, onStreetClick }: SidePanelProps) {
+export default function SidePanel({
+  features,
+  isLoading,
+  userPosition,
+  onStreetClick,
+  onMobileStateChange,
+}: SidePanelProps) {
   const [sortOrder, setSortOrder] = useState<"closest" | "furthest">(config.defaultSortOrder);
   const [isMobile, setIsMobile] = useState(false);
   const [mobileState, setMobileState] = useState<"hidden" | "peek" | "full">("peek");
@@ -52,6 +59,10 @@ export default function SidePanel({ features, isLoading, userPosition, onStreetC
     media.addEventListener("change", onChange);
     return () => media.removeEventListener("change", onChange);
   }, []);
+
+  useEffect(() => {
+    onMobileStateChange?.(mobileState);
+  }, [mobileState, onMobileStateChange]);
 
   const onTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
     touchStartY.current = event.changedTouches[0]?.clientY ?? null;
