@@ -16,8 +16,8 @@ const nextConfig = {
               "default-src 'self'",
               // Dev mode uses eval-source-map which requires 'unsafe-eval'
               isDev
-                ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://www.googletagservices.com https://va.vercel-scripts.com"
-                : "script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagservices.com https://va.vercel-scripts.com",
+                ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://www.googletagservices.com https://va.vercel-scripts.com https://vercel.live"
+                : "script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagservices.com https://va.vercel-scripts.com https://vercel.live",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https://*.tile.openstreetmap.org",
               "connect-src 'self' https://vitals.vercel-insights.com",
