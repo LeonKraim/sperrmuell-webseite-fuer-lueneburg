@@ -39,7 +39,7 @@ export default function SidePanel({ features, isLoading, userPosition, onStreetC
       {/* Header */}
       <div className="flex items-center justify-between border-b px-3 py-2">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-sm">Streets Today</span>
+          <span className="font-semibold text-sm">Sperrmüll Heute</span>
           <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
             {features.length}
           </span>
@@ -66,7 +66,7 @@ export default function SidePanel({ features, isLoading, userPosition, onStreetC
         ) : sorted.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-2 p-8 text-center text-gray-400">
             <CalendarX className="h-10 w-10" />
-            <p className="text-sm">No collections scheduled for today.</p>
+            <p className="text-sm">Heute keine Sperrmüll-Abfuhr geplant.</p>
           </div>
         ) : (
           <div

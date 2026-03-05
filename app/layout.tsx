@@ -3,8 +3,8 @@ import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Waste Schedule Map",
-  description: "Interactive map showing today's waste collection schedule",
+  title: "Sperrmüll Altmetall – Abfuhrplan Karte",
+  description: "Interaktive Karte mit den heutigen Sperrmüll- und Altmetall-Abfuhrterminen im Landkreis Lüneburg",
 };
 
 export default function RootLayout({

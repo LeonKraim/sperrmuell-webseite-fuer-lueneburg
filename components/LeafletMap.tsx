@@ -88,14 +88,14 @@ export default function LeafletMap({ features, isLoading, selectedFeature, onPos
       {!isLoading && features.length === 0 && (
         <div className="absolute inset-x-0 top-4 z-[500] flex justify-center">
           <div className="rounded-lg bg-white px-4 py-2 text-sm text-gray-600 shadow">
-            No locations scheduled for today.
+            Heute keine Sperrmüll-Abfuhr geplant.
           </div>
         </div>
       )}
 
       {gpsStatus === "denied" && (
         <div className="absolute bottom-4 left-1/2 z-[500] -translate-x-1/2 rounded-lg bg-gray-800/90 px-3 py-1.5 text-sm text-white">
-          Location unavailable
+          Standort nicht verfügbar
         </div>
       )}
     </div>
