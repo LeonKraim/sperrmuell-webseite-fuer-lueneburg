@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getGeoJsonData } from "@/lib/dataCache";
 import { filterByDate } from "@/lib/geojson";
-import { tomorrowAsGermanDateString } from "@/lib/dateUtils";
+import { getGarbageCollectionDate, getGarbageCollectionDateFormatted } from "@/lib/dateUtils";
+import { getOverrideFromParams } from "@/lib/dateOverride";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import logger from "@/lib/logger";
 import crypto from "crypto";
@@ -17,11 +18,17 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const data = await getGeoJsonData();
-    const tomorrowStr = tomorrowAsGermanDateString();
+    const { searchParams } = new URL(request.url);
+    const override = getOverrideFromParams(searchParams);
 
-    logger.info("Filtering by date", { dateString: tomorrowStr });
-    const filtered = filterByDate(data, tomorrowStr);
+    const data = await getGeoJsonData();
+    const collectionDateStr = getGarbageCollectionDate(override);
+
+    logger.info("Filtering by date", { dateString: collectionDateStr });
+    const filtered = filterByDate(data, collectionDateStr);
+    
+    // Replace filterDate with formatted version (DD.MM.YYYY with time notation)
+    filtered.filterDate = getGarbageCollectionDateFormatted(override);
 
     logger.info("API today response", {
       ipHash,

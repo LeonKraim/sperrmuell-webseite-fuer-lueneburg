@@ -5,7 +5,6 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { CalendarX, ArrowUpDown, ChevronsDown, ChevronsUp } from "lucide-react";
 import type { WasteFeature } from "@/lib/geojson";
 import { haversineDistance, sortByDistance } from "@/lib/geojson";
-import { getTomorrowAsDDMMYYYY } from "@/lib/dateUtils";
 import config from "@/config";
 
 interface SidePanelProps {
@@ -14,6 +13,7 @@ interface SidePanelProps {
   userPosition: [number, number] | null;
   onStreetClick?: (feature: WasteFeature) => void;
   onMobileStateChange?: (state: "hidden" | "peek" | "full") => void;
+  filterDate?: string;
 }
 
 export default function SidePanel({
@@ -22,13 +22,13 @@ export default function SidePanel({
   userPosition,
   onStreetClick,
   onMobileStateChange,
+  filterDate = "",
 }: SidePanelProps) {
   const [sortOrder, setSortOrder] = useState<"closest" | "furthest">(config.defaultSortOrder);
   const [isMobile, setIsMobile] = useState(false);
   const [mobileState, setMobileState] = useState<"hidden" | "peek" | "full">("peek");
   const touchStartY = useRef<number | null>(null);
   const parentRef = useRef<HTMLDivElement>(null);
-  const tomorrowDate = getTomorrowAsDDMMYYYY();
 
   const sorted = useMemo(() => {
     const limited = features.slice(0, config.maxStreetsInPanel);
@@ -111,7 +111,7 @@ export default function SidePanel({
         {/* Header */}
         <div className="flex items-center justify-between border-b px-3 py-2">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-sm">Sperrmüll Abholung {tomorrowDate}</span>
+            <span className="font-semibold text-sm">Sperrmüll Abholung {filterDate}</span>
             <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
               {features.length}
             </span>
@@ -218,7 +218,7 @@ export default function SidePanel({
           <>
             <div className="flex items-center justify-between border-b px-3 py-2">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-sm">Sperrmüll Abholung {tomorrowDate}</span>
+                <span className="font-semibold text-sm">Sperrmüll Abholung {filterDate}</span>
                 <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
                   {features.length}
                 </span>

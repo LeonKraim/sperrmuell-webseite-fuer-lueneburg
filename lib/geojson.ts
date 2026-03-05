@@ -18,6 +18,7 @@ export interface WasteFeature {
 export interface WasteFeatureCollection {
   type: "FeatureCollection";
   date: string;
+  filterDate?: string; // The German-formatted date used for filtering (e.g., "Sa. 26.12.2026")
   features: WasteFeature[];
 }
 
@@ -77,6 +78,7 @@ export function filterByDate(
   return {
     type: "FeatureCollection",
     date: isoDate,
+    filterDate: dateString, // Include the German-formatted date used for filtering
     features: matched,
   };
 }
