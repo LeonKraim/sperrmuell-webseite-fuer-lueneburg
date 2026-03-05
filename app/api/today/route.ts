@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getGeoJsonData } from "@/lib/dataCache";
 import { filterByDate } from "@/lib/geojson";
-import { todayAsGermanDateString } from "@/lib/dateUtils";
+import { tomorrowAsGermanDateString } from "@/lib/dateUtils";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import logger from "@/lib/logger";
 import crypto from "crypto";
@@ -18,10 +18,10 @@ export async function GET(request: NextRequest) {
 
   try {
     const data = await getGeoJsonData();
-    const todayStr = todayAsGermanDateString();
+    const tomorrowStr = tomorrowAsGermanDateString();
 
-    logger.info("Filtering by date", { dateString: todayStr });
-    const filtered = filterByDate(data, todayStr);
+    logger.info("Filtering by date", { dateString: tomorrowStr });
+    const filtered = filterByDate(data, tomorrowStr);
 
     logger.info("API today response", {
       ipHash,

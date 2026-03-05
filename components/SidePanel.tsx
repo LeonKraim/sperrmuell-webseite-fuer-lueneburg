@@ -5,6 +5,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { CalendarX, ArrowUpDown, ChevronsDown, ChevronsUp } from "lucide-react";
 import type { WasteFeature } from "@/lib/geojson";
 import { haversineDistance, sortByDistance } from "@/lib/geojson";
+import { getTomorrowAsDDMMYYYY } from "@/lib/dateUtils";
 import config from "@/config";
 
 interface SidePanelProps {
@@ -20,6 +21,7 @@ export default function SidePanel({ features, isLoading, userPosition, onStreetC
   const [mobileState, setMobileState] = useState<"hidden" | "peek" | "full">("peek");
   const touchStartY = useRef<number | null>(null);
   const parentRef = useRef<HTMLDivElement>(null);
+  const tomorrowDate = getTomorrowAsDDMMYYYY();
 
   const sorted = useMemo(() => {
     const limited = features.slice(0, config.maxStreetsInPanel);
@@ -98,7 +100,7 @@ export default function SidePanel({ features, isLoading, userPosition, onStreetC
         {/* Header */}
         <div className="flex items-center justify-between border-b px-3 py-2">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-sm">Sperrmüll Heute</span>
+            <span className="font-semibold text-sm">Sperrmüll Abholung {tomorrowDate}</span>
             <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
               {features.length}
             </span>
@@ -205,7 +207,7 @@ export default function SidePanel({ features, isLoading, userPosition, onStreetC
           <>
             <div className="flex items-center justify-between border-b px-3 py-2">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-sm">Sperrmüll Heute</span>
+                <span className="font-semibold text-sm">Sperrmüll Abholung {tomorrowDate}</span>
                 <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
                   {features.length}
                 </span>

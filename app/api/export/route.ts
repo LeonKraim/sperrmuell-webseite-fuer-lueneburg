@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getGeoJsonData } from "@/lib/dataCache";
 import { filterByDate } from "@/lib/geojson";
-import { todayAsGermanDateString } from "@/lib/dateUtils";
+import { tomorrowAsGermanDateString } from "@/lib/dateUtils";
 import { serializeExport } from "@/lib/exportFormats";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import logger from "@/lib/logger";
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const data = await getGeoJsonData();
-    const todayStr = todayAsGermanDateString();
+    const tomorrowStr = tomorrowAsGermanDateString();
     const isoDate = new Date().toISOString().split("T")[0];
     const cacheKey = getCacheKey(isoDate, format);
 
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
       contentType = cached.contentType;
       extension = cached.extension;
     } else {
-      const filtered = filterByDate(data, todayStr);
+      const filtered = filterByDate(data, tomorrowStr);
       const serialized = serializeExport(filtered, format, isoDate);
       content = serialized.content;
       contentType = serialized.contentType;

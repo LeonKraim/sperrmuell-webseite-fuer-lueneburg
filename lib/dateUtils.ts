@@ -89,3 +89,31 @@ export function isToday(raw: string): boolean {
     return false;
   }
 }
+
+/**
+ * Format tomorrow's date into German short format string like "Do. 06.03.2026".
+ */
+export function tomorrowAsGermanDateString(): string {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return formatAsGermanDate(tomorrow);
+}
+
+/**
+ * Format a Date into DD.MM.YYYY format without day of week.
+ */
+export function formatDateAsDDMMYYYY(date: Date): string {
+  const dd = String(date.getDate()).padStart(2, "0");
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const yyyy = String(date.getFullYear());
+  return `${dd}.${mm}.${yyyy}`;
+}
+
+/**
+ * Get tomorrow's date formatted as DD.MM.YYYY.
+ */
+export function getTomorrowAsDDMMYYYY(): string {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return formatDateAsDDMMYYYY(tomorrow);
+}
