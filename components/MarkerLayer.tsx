@@ -33,10 +33,11 @@ export default function MarkerLayer({ features, onMarkerClick }: MarkerLayerProp
         fillOpacity: 0.9,
       });
 
-      const { street, matchedScheduleTypes } = feature.properties;
+      const { street, address, matchedScheduleTypes } = feature.properties;
       marker.bindPopup(
         `<div class="text-sm">
           <strong class="font-semibold">${street}</strong><br/>
+          <span class="text-gray-600">${address}</span><br/>
           <span class="text-xs text-red-600">${matchedScheduleTypes.join(", ")}</span>
         </div>`
       );
