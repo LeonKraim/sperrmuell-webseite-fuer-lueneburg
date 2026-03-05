@@ -1,3 +1,6 @@
+const EXPORT_FORMATS = ["geojson", "kml", "gpx", "csv"] as const;
+type ExportFormat = (typeof EXPORT_FORMATS)[number];
+
 const config = {
   geojsonPath: "./data/waste_schedules.geojson",
   mapTileUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -15,8 +18,8 @@ const config = {
   streetLineOpacity: 0.85,
   defaultSortOrder: "closest" as "closest" | "furthest",
   maxStreetsInPanel: 500,
-  exportFormats: ["geojson", "kml", "gpx", "csv"] as const,
-  exportDefaultFormat: "geojson" as const,
+  exportFormats: EXPORT_FORMATS,
+  exportDefaultFormat: "geojson" as ExportFormat,
   exportFilenamePrefix: "waste_today",
   adsEnabled: true,
   adSlotLeft: "1234567890",

@@ -1,6 +1,15 @@
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 const WINDOW_MS = 60_000; // 1 minute
 const MAX_REQUESTS = 60;
+// Cleanup interval: purge expired entries every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  rateLimitMap.forEach((entry, ip) => {
+    if (now > entry.resetAt) {
+      rateLimitMap.delete(ip);
+    }
+  });
+}, 5 * 60_000).unref?.();
 
 export function checkRateLimit(ip: string): boolean {
   const now = Date.now();

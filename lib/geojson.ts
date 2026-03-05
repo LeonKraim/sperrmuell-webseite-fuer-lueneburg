@@ -63,9 +63,16 @@ export function filterByDate(
     }
   }
 
-  // Get today's ISO date
-  const today = new Date();
-  const isoDate = today.toISOString().split("T")[0];
+  // Derive an ISO date from the dateString (DD.MM.YYYY part) for the response
+  // dateString format: "Di. 27.01.2026" — extract DD.MM.YYYY
+  let isoDate: string;
+  const datePart = dateString.replace(/^[A-Za-z]+\.\s*/, "");
+  const parts = datePart.split(".");
+  if (parts.length === 3) {
+    isoDate = `${parts[2]}-${parts[1].padStart(2, "0")}-${parts[0].padStart(2, "0")}`;
+  } else {
+    isoDate = new Date().toISOString().split("T")[0];
+  }
 
   return {
     type: "FeatureCollection",

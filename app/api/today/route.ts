@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(filtered, {
       status: 200,
       headers: {
-        "Cache-Control": "no-store, max-age=0",
+        "Cache-Control": "no-store",
       },
     });
   } catch (err) {

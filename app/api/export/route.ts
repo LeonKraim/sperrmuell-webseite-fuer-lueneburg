@@ -8,8 +8,8 @@ import logger from "@/lib/logger";
 import crypto from "crypto";
 import config from "@/config";
 
-// Cache: date+format -> serialized export
-const exportCache = new Map<string, { content: string; contentType: string; extension: string; date: string }>();
+// Cache: cacheKey (date::format) -> serialized export
+const exportCache = new Map<string, { content: string; contentType: string; extension: string }>();
 
 function getCacheKey(date: string, format: string): string {
   return `${date}::${format}`;
@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
     let extension: string;
 
     const cached = exportCache.get(cacheKey);
-    if (cached && cached.date === isoDate) {
+    if (cached) {
       content = cached.content;
       contentType = cached.contentType;
       extension = cached.extension;
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
       content = serialized.content;
       contentType = serialized.contentType;
       extension = serialized.extension;
-      exportCache.set(cacheKey, { content, contentType, extension, date: isoDate });
+      exportCache.set(cacheKey, { content, contentType, extension });
     }
 
     const filename = `${config.exportFilenamePrefix}_${isoDate}.${extension}`;
