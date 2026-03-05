@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import LoadingBar from "./LoadingBar";
 import Throbber from "./Throbber";
@@ -16,6 +16,8 @@ export default function AppShell() {
   const [mapLoading, setMapLoading] = useState(true);
   const [selectedFeature, setSelectedFeature] = useState<WasteFeature | null>(null);
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
+  const [mobilePanelState, setMobilePanelState] = useState<"hidden" | "peek" | "full">("peek");
+  const [isMobile, setIsMobile] = useState(false);
 
   const isFullyLoaded = !mapLoading;
 
@@ -27,6 +29,25 @@ export default function AppShell() {
   const handleLoadingChange = useCallback((loading: boolean) => {
     setMapLoading(loading);
   }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const onChange = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches);
+    };
+
+    setIsMobile(media.matches);
+    media.addEventListener("change", onChange);
+
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+
+  const mobilePanelHeight =
+    mobilePanelState === "full"
+      ? "78vh"
+      : mobilePanelState === "peek"
+        ? "240px"
+        : "48px";
 
   return (
     <>
@@ -55,7 +76,8 @@ export default function AppShell() {
             href="https://github.com/LeonKraim"
             target="_blank"
             rel="noopener noreferrer"
-            className="fixed bottom-[calc(240px+1rem)] left-4 z-[1200] rounded-lg bg-white/90 px-3 py-1.5 text-sm font-medium text-gray-700 shadow-md transition-colors hover:bg-white md:bottom-4"
+            className="fixed left-4 z-[1200] rounded-lg bg-white/90 px-3 py-1.5 text-sm font-medium text-gray-700 shadow-md transition-[bottom,background-color] duration-300 hover:bg-white md:bottom-4"
+            style={isMobile ? { bottom: `calc(${mobilePanelHeight} + 1vh)` } : undefined}
             title="Made by Leon Kraim"
           >
             Made by Leon Kraim
@@ -75,6 +97,7 @@ export default function AppShell() {
           isLoading={mapLoading}
           userPosition={userPosition}
           onStreetClick={setSelectedFeature}
+          onMobileStateChange={setMobilePanelState}
         />
       </div>
     </>
