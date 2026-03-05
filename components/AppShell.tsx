@@ -55,7 +55,7 @@ export default function AppShell() {
             href="https://github.com/LeonKraim"
             target="_blank"
             rel="noopener noreferrer"
-            className="absolute bottom-4 left-4 z-[400] rounded-lg bg-white/90 px-3 py-1.5 text-sm font-medium text-gray-700 shadow-md hover:bg-white transition-colors"
+            className="absolute bottom-4 left-4 z-[1100] rounded-lg bg-white/90 px-3 py-1.5 text-sm font-medium text-gray-700 shadow-md hover:bg-white transition-colors"
             title="Made by Leon Kraim"
           >
             Made by Leon Kraim
