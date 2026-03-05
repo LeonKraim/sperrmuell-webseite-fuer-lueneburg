@@ -3,8 +3,8 @@ import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Sperrmüll Altmetall – Abfuhrplan Karte",
-  description: "Interaktive Karte mit den heutigen Sperrmüll- und Altmetall-Abfuhrterminen im Landkreis Lüneburg",
+  title: "Sperrmüll Heute Abfuhrplan Karte",
+  description: "Karte mit den morgigen Sperrmüll-Abfuhrterminen im Landkreis Lüneburg.",
 };
 
 export default function RootLayout({
