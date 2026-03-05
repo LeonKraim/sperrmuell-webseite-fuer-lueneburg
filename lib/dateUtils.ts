@@ -134,3 +134,59 @@ export function getTomorrowAsDDMMYYYY(override?: DateTimeOverride): string {
   tomorrow.setDate(tomorrow.getDate() + 1);
   return formatDateAsDDMMYYYY(tomorrow);
 }
+
+/**
+ * Get the garbage collection date.
+ * Before 06:30: returns today's date
+ * From 06:30 onwards: returns tomorrow's date
+ * Returns in German format with day of week: "Di. 27.01.2026"
+ * 
+ * @param override Optional date/time override {date: 'DD.MM.YYYY', time: 'HH:MM'}
+ */
+export function getGarbageCollectionDate(override?: DateTimeOverride): string {
+  const now = getOverriddenDate(override);
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+  const timeInMinutes = hour * 60 + minute;
+  const cutoffTimeInMinutes = 6 * 60 + 30; // 06:30
+
+  let collectionDate: Date;
+  if (timeInMinutes < cutoffTimeInMinutes) {
+    // Before 06:30: use today
+    collectionDate = new Date(now);
+  } else {
+    // From 06:30 onwards: use tomorrow
+    collectionDate = new Date(now);
+    collectionDate.setDate(collectionDate.getDate() + 1);
+  }
+
+  return formatAsGermanDate(collectionDate);
+}
+
+/**
+ * Get the garbage collection date formatted as DD.MM.YYYY with time notation.
+ * Before 06:30: returns today's date with "(ab 06:30)" notation
+ * From 06:30 onwards: returns tomorrow's date with "(ab 06:30)" notation
+ * 
+ * @param override Optional date/time override {date: 'DD.MM.YYYY', time: 'HH:MM'}
+ */
+export function getGarbageCollectionDateFormatted(override?: DateTimeOverride): string {
+  const now = getOverriddenDate(override);
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+  const timeInMinutes = hour * 60 + minute;
+  const cutoffTimeInMinutes = 6 * 60 + 30; // 06:30
+
+  let collectionDate: Date;
+  if (timeInMinutes < cutoffTimeInMinutes) {
+    // Before 06:30: use today
+    collectionDate = new Date(now);
+  } else {
+    // From 06:30 onwards: use tomorrow
+    collectionDate = new Date(now);
+    collectionDate.setDate(collectionDate.getDate() + 1);
+  }
+
+  const dateStr = formatDateAsDDMMYYYY(collectionDate);
+  return `${dateStr} (ab 06:30)`;
+}
