@@ -42,7 +42,11 @@ export async function GET(request: NextRequest) {
         ? err.message
         : "internal_error";
 
-    logger.error("API today error", { error: err, ipHash, durationMs: Date.now() - start });
+    logger.error("API today error", { 
+      error: err instanceof Error ? err.message : String(err), 
+      ipHash, 
+      durationMs: Date.now() - start 
+    });
 
     return NextResponse.json({ error: errorCode }, { status: 500 });
   }

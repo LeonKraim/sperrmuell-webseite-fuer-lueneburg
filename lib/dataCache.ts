@@ -13,18 +13,12 @@ export async function getGeoJsonData(): Promise<{ type: string; features: { type
   const start = Date.now();
   let parsed: { type: string; features: { type: string; geometry: unknown; properties: Record<string, unknown> }[] };
 
-  // Build the file path - use __dirname for server-side reliability
-  // In Next.js, __dirname may need to be constructed from import.meta.url
-  const isProduction = process.env.NODE_ENV === "production";
-  
-  // Try multiple path strategies on Vercel/production
+  // Vercel serves the public directory as static files, so we need to read from there
   const possiblePaths = [
-    // For production builds with bundled data
-    path.join(process.cwd(), ".next/server", config.geojsonPath),
-    // Root-relative path for development
-    path.resolve(process.cwd(), config.geojsonPath),
-    // Fallback: direct root path
-    path.join(process.cwd(), config.geojsonPath),
+    // Public directory (Vercel + development)
+    path.join(process.cwd(), "public/waste_schedules.geojson"),
+    // Legacy data directory path (for backward compatibility)
+    path.join(process.cwd(), "data/waste_schedules.geojson"),
   ];
 
   let raw: string | null = null;
@@ -38,8 +32,7 @@ export async function getGeoJsonData(): Promise<{ type: string; features: { type
         break;
       }
     } catch (err) {
-      // Continue to next path
-      logger.debug?.("Failed to read from path", { path: filePath, error: String(err) });
+      logger.debug?.("Failed to read from path", { path: filePath });
     }
   }
 
@@ -53,7 +46,7 @@ export async function getGeoJsonData(): Promise<{ type: string; features: { type
   try {
     parsed = JSON.parse(raw);
   } catch (err) {
-    logger.error("Failed to parse GeoJSON file", { error: err });
+    logger.error("Failed to parse GeoJSON file", { error: String(err) });
     throw new Error("parse_error");
   }
 

@@ -2,7 +2,7 @@ const EXPORT_FORMATS = ["geojson", "kml", "gpx", "csv"] as const;
 type ExportFormat = (typeof EXPORT_FORMATS)[number];
 
 const config = {
-  geojsonPath: "./data/waste_schedules.geojson",
+  geojsonPath: "./public/waste_schedules.geojson",
   mapTileUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   mapAttribution: "© OpenStreetMap contributors",
   mapDefaultCenter: [53.72, 10.19] as [number, number],
