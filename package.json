@@ -16,6 +16,7 @@
     "@types/leaflet": "^1.9.21",
     "@types/nprogress": "^0.2.3",
     "@types/stream-json": "^1.7.8",
+    "@vercel/analytics": "^1.6.1",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.577.0",
     "next": "^15.5.12",
