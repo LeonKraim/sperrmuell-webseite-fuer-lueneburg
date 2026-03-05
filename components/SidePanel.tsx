@@ -105,11 +105,8 @@ export default function SidePanel({ features, isLoading, userPosition, onStreetC
                     <div className="text-xs text-gray-500">
                       {feature.properties.region}
                       {dist !== null && isFinite(dist) && (
-                        <span> · {dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`} away</span>
+                        <span> · {dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`} Entfernung</span>
                       )}
-                    </div>
-                    <div className="text-xs text-red-600 truncate">
-                      {feature.properties.matchedScheduleTypes.join(", ")}
                     </div>
                   </button>
                 </div>

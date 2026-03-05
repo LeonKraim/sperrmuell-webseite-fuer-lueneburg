@@ -3,10 +3,33 @@ import config from "../config";
 import fs from "fs";
 import path from "path";
 
-// Ensure log directory exists
-const logDir = path.dirname(config.logFilePath);
-if (!fs.existsSync(logDir)) {
-  fs.mkdirSync(logDir, { recursive: true });
+// Detect if running on Vercel or other serverless platform
+const isServerless = !!process.env.VERCEL || !!process.env.AWS_LAMBDA_FUNCTION_NAME;
+
+// Ensure log directory exists (only on non-serverless platforms)
+let logFileTransport: winston.transport | null = null;
+
+if (!isServerless) {
+  try {
+    const logDir = path.dirname(config.logFilePath);
+    if (!fs.existsSync(logDir)) {
+      fs.mkdirSync(logDir, { recursive: true });
+    }
+    logFileTransport = new winston.transports.File({
+      filename: config.logFilePath,
+      maxsize: config.logMaxSizeMb * 1024 * 1024,
+      maxFiles: config.logMaxFiles,
+      tailable: true,
+    });
+  } catch (err) {
+    // Silently fall back to console-only logging if file logging fails
+    console.warn("File logging unavailable, using console only");
+  }
+}
+
+const transports: winston.transport[] = [new winston.transports.Console()];
+if (logFileTransport) {
+  transports.push(logFileTransport);
 }
 
 const logger = winston.createLogger({
@@ -15,15 +38,7 @@ const logger = winston.createLogger({
     winston.format.timestamp(),
     winston.format.json()
   ),
-  transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({
-      filename: config.logFilePath,
-      maxsize: config.logMaxSizeMb * 1024 * 1024,
-      maxFiles: config.logMaxFiles,
-      tailable: true,
-    }),
-  ],
+  transports,
 });
 
 export default logger;

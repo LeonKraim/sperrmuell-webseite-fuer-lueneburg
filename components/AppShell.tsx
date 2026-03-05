@@ -35,9 +35,11 @@ export default function AppShell() {
 
       <div className="flex h-screen w-full overflow-hidden">
         {/* Left Ad */}
-        <div className="hidden lg:flex flex-shrink-0 items-start justify-center pt-4">
-          <AdBanner slot={config.adSlotLeft} />
-        </div>
+        {config.adSidebarsEnabled && (
+          <div className="hidden lg:flex flex-shrink-0 items-start justify-center pt-4">
+            <AdBanner slot={config.adSlotLeft} />
+          </div>
+        )}
 
         {/* Map Area */}
         <div className="relative flex-1 overflow-hidden">
@@ -50,9 +52,11 @@ export default function AppShell() {
         </div>
 
         {/* Right Ad */}
-        <div className="hidden lg:flex flex-shrink-0 items-start justify-center pt-4">
-          <AdBanner slot={config.adSlotRight} />
-        </div>
+        {config.adSidebarsEnabled && (
+          <div className="hidden lg:flex flex-shrink-0 items-start justify-center pt-4">
+            <AdBanner slot={config.adSlotRight} />
+          </div>
+        )}
 
         {/* Side Panel */}
         <SidePanel
