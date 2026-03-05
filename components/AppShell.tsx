@@ -9,7 +9,6 @@ import AdBanner from "./AdBanner";
 import SidePanel from "./SidePanel";
 import config from "@/config";
 import type { WasteFeature } from "@/lib/geojson";
-import type { DateTimeOverride } from "@/lib/dateOverride";
 
 const MapView = dynamic(() => import("./MapView"), { ssr: false });
 
@@ -23,11 +22,10 @@ export default function AppShell() {
   const [mobilePanelState, setMobilePanelState] = useState<"hidden" | "peek" | "full">("peek");
   const [isMobile, setIsMobile] = useState(false);
   
-  // Extract override parameters from URL
-  const override: DateTimeOverride = {
-    date: searchParams.get("overrideDate") ?? undefined,
-    time: searchParams.get("overrideTime") ?? undefined,
-  };
+  // Extract override parameters from URL if present
+  const overrideDate = searchParams.get("overrideDate");
+  const overrideTime = searchParams.get("overrideTime");
+  const override = overrideDate || overrideTime ? { date: overrideDate ?? undefined, time: overrideTime ?? undefined } : undefined;
 
   const isFullyLoaded = !mapLoading;
 

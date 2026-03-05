@@ -4,7 +4,6 @@ import { useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
 import useSWR from "swr";
 import type { WasteFeatureCollection, WasteFeature } from "@/lib/geojson";
-import type { DateTimeOverride } from "@/lib/dateOverride";
 
 // Dynamically import to avoid SSR issues
 const LeafletMap = dynamic(() => import("./LeafletMap"), { ssr: false });
@@ -16,15 +15,17 @@ interface MapViewProps {
   onLoadingChange?: (loading: boolean) => void;
   selectedFeature?: WasteFeature | null;
   onPositionChange?: (pos: [number, number]) => void;
-  override?: DateTimeOverride;
+  override?: { date?: string; time?: string } | undefined;
 }
 
 export default function MapView({ onDataLoaded, onLoadingChange, selectedFeature, onPositionChange, override }: MapViewProps) {
-  // Build API URL with override parameters
+  // Build API URL with override parameters if provided
   const apiUrl = useMemo(() => {
+    if (!override) return "/api/today";
+    
     const params = new URLSearchParams();
-    if (override?.date) params.append("overrideDate", override.date);
-    if (override?.time) params.append("overrideTime", override.time);
+    if (override.date) params.append("overrideDate", override.date);
+    if (override.time) params.append("overrideTime", override.time);
     
     const queryString = params.toString();
     return queryString ? `/api/today?${queryString}` : "/api/today";
