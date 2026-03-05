@@ -14,9 +14,10 @@ interface MapViewProps {
   onDataLoaded?: (features: WasteFeature[]) => void;
   onLoadingChange?: (loading: boolean) => void;
   selectedFeature?: WasteFeature | null;
+  onPositionChange?: (pos: [number, number]) => void;
 }
 
-export default function MapView({ onDataLoaded, onLoadingChange, selectedFeature }: MapViewProps) {
+export default function MapView({ onDataLoaded, onLoadingChange, selectedFeature, onPositionChange }: MapViewProps) {
   const { data, error, isLoading } = useSWR<WasteFeatureCollection>("/api/today", fetcher);
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export default function MapView({ onDataLoaded, onLoadingChange, selectedFeature
       features={data?.features ?? []}
       isLoading={isLoading}
       selectedFeature={selectedFeature ?? null}
+      onPositionChange={onPositionChange}
     />
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "@/styles/map.css";
 import config from "@/config";
@@ -10,14 +10,24 @@ import MarkerLayer from "./MarkerLayer";
 import UserLocationMarker from "./UserLocationMarker";
 import ExportButton from "./ExportButton";
 
+function PanToFeature({ feature }: { feature: WasteFeature | null }) {
+  const map = useMap();
+  useEffect(() => {
+    if (!feature) return;
+    const [lng, lat] = feature.geometry.coordinates;
+    map.flyTo([lat, lng], Math.max(map.getZoom(), 15));
+  }, [feature, map]);
+  return null;
+}
+
 interface LeafletMapProps {
   features: WasteFeature[];
   isLoading: boolean;
   selectedFeature: WasteFeature | null;
+  onPositionChange?: (pos: [number, number]) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function LeafletMap({ features, isLoading, selectedFeature: _selectedFeature }: LeafletMapProps) {
+export default function LeafletMap({ features, isLoading, selectedFeature, onPositionChange }: LeafletMapProps) {
   const [userPos, setUserPos] = useState<[number, number] | null>(null);
   const [isFirstFix, setIsFirstFix] = useState(true);
   const [gpsStatus, setGpsStatus] = useState<"pending" | "granted" | "denied">("pending");
@@ -34,6 +44,7 @@ export default function LeafletMap({ features, isLoading, selectedFeature: _sele
         setUserPos(coords);
         setGpsStatus("granted");
         setIsFirstFix(false);
+        onPositionChange?.(coords);
       },
       () => {
         setGpsStatus("denied");
@@ -42,7 +53,7 @@ export default function LeafletMap({ features, isLoading, selectedFeature: _sele
     );
 
     return () => navigator.geolocation.clearWatch(watchId);
-  }, []);
+  }, [onPositionChange]);
 
   return (
     <div className="relative h-full w-full">
@@ -63,6 +74,7 @@ export default function LeafletMap({ features, isLoading, selectedFeature: _sele
           position={userPos}
           isFirstFix={isFirstFix}
         />
+        <PanToFeature feature={selectedFeature} />
       </MapContainer>
 
       <ExportButton />

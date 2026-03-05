@@ -15,7 +15,7 @@ export default function AppShell() {
   const [features, setFeatures] = useState<WasteFeature[]>([]);
   const [mapLoading, setMapLoading] = useState(true);
   const [selectedFeature, setSelectedFeature] = useState<WasteFeature | null>(null);
-  const [userPosition] = useState<[number, number] | null>(null);
+  const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
 
   const isFullyLoaded = !mapLoading;
 
@@ -45,6 +45,7 @@ export default function AppShell() {
             onDataLoaded={handleDataLoaded}
             onLoadingChange={handleLoadingChange}
             selectedFeature={selectedFeature}
+            onPositionChange={setUserPosition}
           />
         </div>
 
