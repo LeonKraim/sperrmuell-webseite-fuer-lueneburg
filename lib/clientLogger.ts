@@ -20,6 +20,11 @@ export const clientLogger = {
   log: (...args: unknown[]) => {
     console.log(...args);
   },
+  info: (message: string, extra?: Record<string, unknown>) => {
+    const full = extra ? `${message} ${JSON.stringify(extra)}` : message;
+    console.info(full);
+    sendToServer("info", full);
+  },
   warn: (...args: unknown[]) => {
     console.warn(...args);
   },
