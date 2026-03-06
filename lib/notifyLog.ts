@@ -9,6 +9,8 @@ export interface NotifyRunLog {
   sent: number;
   failed: number;
   skipped: boolean;     // true if already sent for this date (dedup)
+  emailSent?: number;
+  emailFailed?: number;
 }
 
 async function readBlobJson<T>(pathname: string): Promise<T | null> {

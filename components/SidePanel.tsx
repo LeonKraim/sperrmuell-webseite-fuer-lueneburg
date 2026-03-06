@@ -7,6 +7,7 @@ import type { WasteFeature } from "@/lib/geojson";
 import { haversineDistance, sortByDistance } from "@/lib/geojson";
 import config from "@/config";
 import NotificationButton from "@/components/NotificationButton";
+import EmailSubscribeForm from "@/components/EmailSubscribeForm";
 
 interface SidePanelProps {
   features: WasteFeature[];
@@ -140,6 +141,7 @@ export default function SidePanel({
               <CalendarX className="h-10 w-10" />
               <p className="text-sm">Heute keine Sperrmüll-Abfuhr geplant.</p>
               <NotificationButton />
+              <EmailSubscribeForm />
             </div>
           ) : (
             <div
@@ -247,6 +249,7 @@ export default function SidePanel({
                   <CalendarX className="h-10 w-10" />
                   <p className="text-sm">Heute keine Sperrmüll-Abfuhr geplant.</p>
                   <NotificationButton />
+                  <EmailSubscribeForm />
                 </div>
               ) : mobileState === "peek" ? (
                 <div className="space-y-2 p-2">
