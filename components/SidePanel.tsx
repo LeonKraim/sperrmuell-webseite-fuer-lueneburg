@@ -6,6 +6,7 @@ import { CalendarX, ArrowUpDown, ChevronsDown, ChevronsUp } from "lucide-react";
 import type { WasteFeature } from "@/lib/geojson";
 import { haversineDistance, sortByDistance } from "@/lib/geojson";
 import config from "@/config";
+import NotificationButton from "@/components/NotificationButton";
 
 interface SidePanelProps {
   features: WasteFeature[];
@@ -138,6 +139,7 @@ export default function SidePanel({
             <div className="flex flex-col items-center justify-center gap-2 p-8 text-center text-gray-400">
               <CalendarX className="h-10 w-10" />
               <p className="text-sm">Heute keine Sperrmüll-Abfuhr geplant.</p>
+              <NotificationButton />
             </div>
           ) : (
             <div
@@ -244,6 +246,7 @@ export default function SidePanel({
                 <div className="flex flex-col items-center justify-center gap-2 p-8 text-center text-gray-400">
                   <CalendarX className="h-10 w-10" />
                   <p className="text-sm">Heute keine Sperrmüll-Abfuhr geplant.</p>
+                  <NotificationButton />
                 </div>
               ) : mobileState === "peek" ? (
                 <div className="space-y-2 p-2">

@@ -8,6 +8,7 @@ import {
   getTomorrowAsDDMMYYYY,
   getGarbageCollectionDate,
   getGarbageCollectionDateFormatted,
+  getNextCollectionDateFromData,
   ParseError,
 } from "@/lib/dateUtils";
 
@@ -423,5 +424,132 @@ describe("getGarbageCollectionDateFormatted", () => {
   it("always ends with (ab 06:30)", () => {
     const result = getGarbageCollectionDateFormatted({ date: "01.01.2026", time: "12:00" });
     expect(result).toMatch(/\(ab 06:30\)$/);
+  });
+});
+
+// ───────────── getNextCollectionDateFromData ─────────────
+
+type FeatureData = {
+  type: string;
+  features: { type: string; geometry: unknown; properties: Record<string, unknown> }[];
+};
+
+function makeData(schedules: Record<string, string[]>): FeatureData {
+  return {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        geometry: { type: "Point", coordinates: [10.0, 53.0] },
+        properties: {
+          region: "Test",
+          street: "Musterstraße",
+          address: "Musterstraße 1",
+          waste_schedules: schedules,
+        },
+      },
+    ],
+  };
+}
+
+describe("getNextCollectionDateFromData", () => {
+  it("returns the start date when it exists in the data", () => {
+    const data = makeData({ Sperrmüll: ["Di. 10.03.2026"] });
+    expect(getNextCollectionDateFromData(data, "Di. 10.03.2026")).toBe("Di. 10.03.2026");
+  });
+
+  it("returns the next available date when start date has no collections", () => {
+    const data = makeData({ Sperrmüll: ["Di. 10.03.2026"] });
+    // 07.03.2026 has no collection, next is 10.03.2026
+    expect(getNextCollectionDateFromData(data, "Sa. 07.03.2026")).toBe("Di. 10.03.2026");
+  });
+
+  it("picks the earliest of multiple future dates", () => {
+    const data = makeData({ Sperrmüll: ["Di. 17.03.2026", "Di. 10.03.2026", "Di. 24.03.2026"] });
+    expect(getNextCollectionDateFromData(data, "Sa. 07.03.2026")).toBe("Di. 10.03.2026");
+  });
+
+  it("searches across multiple schedule types", () => {
+    const data = makeData({
+      Sperrmüll: ["Di. 17.03.2026"],
+      Restmüll: ["Di. 10.03.2026"],
+    });
+    expect(getNextCollectionDateFromData(data, "Sa. 07.03.2026")).toBe("Di. 10.03.2026");
+  });
+
+  it("searches across multiple features", () => {
+    const data: FeatureData = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: { type: "Point", coordinates: [10.0, 53.0] },
+          properties: { region: "A", street: "A", address: "A", waste_schedules: { Sperrmüll: ["Di. 17.03.2026"] } },
+        },
+        {
+          type: "Feature",
+          geometry: { type: "Point", coordinates: [10.1, 53.1] },
+          properties: { region: "B", street: "B", address: "B", waste_schedules: { Sperrmüll: ["Di. 10.03.2026"] } },
+        },
+      ],
+    };
+    expect(getNextCollectionDateFromData(data, "Sa. 07.03.2026")).toBe("Di. 10.03.2026");
+  });
+
+  it("falls back to startDateStr when no future dates exist in data", () => {
+    const data = makeData({ Sperrmüll: ["Di. 03.03.2026"] }); // in the past relative to start
+    expect(getNextCollectionDateFromData(data, "Sa. 07.03.2026")).toBe("Sa. 07.03.2026");
+  });
+
+  it("falls back to startDateStr when data has no features", () => {
+    const data: FeatureData = { type: "FeatureCollection", features: [] };
+    expect(getNextCollectionDateFromData(data, "Sa. 07.03.2026")).toBe("Sa. 07.03.2026");
+  });
+
+  it("ignores features without waste_schedules", () => {
+    const data: FeatureData = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: { type: "Point", coordinates: [10.0, 53.0] },
+          properties: { region: "A", street: "A", address: "A" },
+        },
+      ],
+    };
+    expect(getNextCollectionDateFromData(data, "Sa. 07.03.2026")).toBe("Sa. 07.03.2026");
+  });
+
+  it("ignores unparseable date strings in schedules", () => {
+    const data = makeData({ Sperrmüll: ["not-a-date", "Di. 10.03.2026"] });
+    expect(getNextCollectionDateFromData(data, "Sa. 07.03.2026")).toBe("Di. 10.03.2026");
+  });
+
+  it("falls back when startDateStr is unparseable", () => {
+    const data = makeData({ Sperrmüll: ["Di. 10.03.2026"] });
+    expect(getNextCollectionDateFromData(data, "invalid")).toBe("invalid");
+  });
+
+  it("treats the start date itself as a valid match (not strictly after)", () => {
+    const data = makeData({ Sperrmüll: ["Fr. 06.03.2026", "Di. 10.03.2026"] });
+    expect(getNextCollectionDateFromData(data, "Fr. 06.03.2026")).toBe("Fr. 06.03.2026");
+  });
+
+  it("handles non-array schedule values gracefully", () => {
+    const data: FeatureData = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: { type: "Point", coordinates: [10.0, 53.0] },
+          properties: {
+            region: "A", street: "A", address: "A",
+            waste_schedules: { Sperrmüll: "Di. 10.03.2026" as unknown as string[] },
+          },
+        },
+      ],
+    };
+    // Non-array value should be skipped without throwing
+    expect(() => getNextCollectionDateFromData(data, "Sa. 07.03.2026")).not.toThrow();
   });
 });
