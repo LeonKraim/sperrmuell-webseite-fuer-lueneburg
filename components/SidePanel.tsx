@@ -111,7 +111,7 @@ export default function SidePanel({
         {/* Header */}
         <div className="flex items-center justify-between border-b px-3 py-2">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-sm">Sperrmüll Abholung {filterDate}</span>
+            <span className="font-semibold text-sm">Nächste Sperrmüll Abholung <span className="whitespace-nowrap">{filterDate}</span></span>
             <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
               {features.length}
             </span>
@@ -218,7 +218,7 @@ export default function SidePanel({
           <>
             <div className="flex items-center justify-between border-b px-3 py-2">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-sm">Sperrmüll Abholung {filterDate}</span>
+                <span className="font-semibold text-sm">Nächste Sperrmüll Abholung <span className="whitespace-nowrap">{filterDate}</span></span>
                 <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
                   {features.length}
                 </span>

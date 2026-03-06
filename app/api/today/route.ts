@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getGeoJsonData } from "@/lib/dataCache";
 import { filterByDate } from "@/lib/geojson";
-import { getGarbageCollectionDate, getGarbageCollectionDateFormatted } from "@/lib/dateUtils";
+import { getGarbageCollectionDate, getGarbageCollectionDateFormatted, getNextCollectionDateFromData } from "@/lib/dateUtils";
 import { getOverrideFromParams } from "@/lib/dateOverride";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import logger from "@/lib/logger";
@@ -26,9 +26,11 @@ export async function GET(request: NextRequest) {
 
     logger.info("Filtering by date", { dateString: collectionDateStr });
     const filtered = filterByDate(data, collectionDateStr);
-    
-    // Replace filterDate with formatted version (DD.MM.YYYY with time notation)
-    filtered.filterDate = getGarbageCollectionDateFormatted(override);
+
+    // For display text: show the next date that actually has collections
+    const nextDateStr = getNextCollectionDateFromData(data, collectionDateStr);
+    const nextDatePart = nextDateStr.replace(/^[A-Za-z]+\.\s*/, "");
+    filtered.filterDate = `${nextDatePart}  (ab 06:30)`;
 
     logger.info("API today response", {
       ipHash,
