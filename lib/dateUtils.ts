@@ -190,3 +190,46 @@ export function getGarbageCollectionDateFormatted(override?: DateTimeOverride): 
   const dateStr = formatDateAsDDMMYYYY(collectionDate);
   return `${dateStr} (ab 06:30)`;
 }
+
+/**
+ * Given GeoJSON data and a starting German date string, find the earliest date
+ * in the data (>= startDateStr) that has at least one waste collection.
+ * Falls back to startDateStr if no future collection date is found.
+ *
+ * @param data The GeoJSON feature collection
+ * @param startDateStr German format date string like "Sa. 07.03.2026"
+ */
+export function getNextCollectionDateFromData(
+  data: { features: { type: string; geometry: unknown; properties: Record<string, unknown> }[] },
+  startDateStr: string
+): string {
+  const allDates = new Set<string>();
+  for (const feature of data.features || []) {
+    const schedules = (feature.properties?.waste_schedules) as Record<string, string[]> | undefined;
+    if (!schedules || typeof schedules !== "object") continue;
+    for (const dates of Object.values(schedules)) {
+      if (Array.isArray(dates)) for (const d of dates) allDates.add(d);
+    }
+  }
+
+  let startDate: Date;
+  try {
+    startDate = parseGermanDate(startDateStr);
+  } catch {
+    return startDateStr;
+  }
+
+  let earliest: { raw: string; date: Date } | null = null;
+  for (const raw of allDates) {
+    try {
+      const d = parseGermanDate(raw);
+      if (d >= startDate && (!earliest || d < earliest.date)) {
+        earliest = { raw, date: d };
+      }
+    } catch {
+      // skip unparseable entries
+    }
+  }
+
+  return earliest?.raw ?? startDateStr;
+}
