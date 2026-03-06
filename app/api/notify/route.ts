@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import webpush from "web-push";
 import { readSubscriptions, removeSubscription } from "@/lib/subscriptions";
+import { getConfirmedEmailSubs, pruneExpiredUnconfirmed } from "@/lib/emailSubscriptions";
+import { sendEmail } from "@/lib/mailer";
+import { buildNotificationEmail } from "@/lib/emailTemplates";
 import { getGeoJsonData } from "@/lib/dataCache";
 import { parseGermanDate, getNextCollectionDateFromData } from "@/lib/dateUtils";
 import { hasAlreadySentForDate, markDateAsSent, writeLastRunLog } from "@/lib/notifyLog";
@@ -103,17 +106,41 @@ export async function GET(request: NextRequest) {
 
   logger.info("Push notifications sent", { sent, failed: failed.length, tomorrow: tomorrowStr });
 
+  // Send email notifications
+  let emailSent = 0;
+  let emailFailed = 0;
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    `https://${request.headers.get("x-forwarded-host") || request.headers.get("host")}`;
+  const emailSubs = await getConfirmedEmailSubs();
+  for (const sub of emailSubs) {
+    try {
+      const { subject, html } = buildNotificationEmail(notifyDateStr, sub.token, baseUrl);
+      await sendEmail(sub.email, subject, html);
+      emailSent++;
+    } catch (err) {
+      emailFailed++;
+      logger.warn("Failed to send email notification", { error: String(err), email: sub.email.slice(0, 4) + "***" });
+    }
+  }
+  logger.info("Email notifications sent", { emailSent, emailFailed });
+
+  // Prune unconfirmed expired email subs while we're running
+  await pruneExpiredUnconfirmed();
+
   // Persist run result for /api/notify-status and mark date as sent (dedup).
   if (!force) {
-    if (sent > 0) await markDateAsSent(tomorrowStr);
+    if (sent > 0 || emailSent > 0) await markDateAsSent(tomorrowStr);
     await writeLastRunLog({
       runAt: new Date().toISOString(),
       collectionDate: tomorrowStr,
       sent,
       failed: failed.length,
       skipped: false,
+      emailSent,
+      emailFailed,
     });
   }
 
-  return NextResponse.json({ sent, failed: failed.length });
+  return NextResponse.json({ sent, failed: failed.length, emailSent, emailFailed });
 }

@@ -174,7 +174,7 @@ export default function NotificationButton() {
         ? "HTTPS erforderlich"
         : state === "loading"
         ? "Einen Moment…"
-        : "Erinnere mich vor Sperrmüll-Terminen"}
+        : "Erinnere mich vor Sperrmüll-Terminen per Push Benachrichtigung"}
     </button>
   );
 }
