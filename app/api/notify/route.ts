@@ -6,16 +6,16 @@ import { parseGermanDate, getNextCollectionDateFromData } from "@/lib/dateUtils"
 import { hasAlreadySentForDate, markDateAsSent, writeLastRunLog } from "@/lib/notifyLog";
 import logger from "@/lib/logger";
 
-webpush.setVapidDetails(
-  process.env.VAPID_EMAIL!,
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-  process.env.VAPID_PRIVATE_KEY!
-);
-
 // This route is called by a cron job each morning.
 // It sends push notifications to all subscribers whose area has a Sperrmüll
 // collection tomorrow (so they are notified the day before).
 export async function GET(request: NextRequest) {
+  webpush.setVapidDetails(
+    process.env.VAPID_EMAIL!,
+    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
+    process.env.VAPID_PRIVATE_KEY!
+  );
+
   // Protect with a simple secret so only the cron caller can trigger it
   const authHeader = request.headers.get("authorization");
   const secret = process.env.CRON_SECRET;
