@@ -3,6 +3,7 @@ import webpush from "web-push";
 import { readSubscriptions, removeSubscription } from "@/lib/subscriptions";
 import { getGeoJsonData } from "@/lib/dataCache";
 import { parseGermanDate, getNextCollectionDateFromData } from "@/lib/dateUtils";
+import { hasAlreadySentForDate, markDateAsSent, writeLastRunLog } from "@/lib/notifyLog";
 import logger from "@/lib/logger";
 
 webpush.setVapidDetails(
@@ -59,6 +60,15 @@ export async function GET(request: NextRequest) {
       logger.info("No collections tomorrow, skipping notifications", { tomorrow: tomorrowStr });
       return NextResponse.json({ sent: 0, reason: "no_collections_tomorrow" });
     }
+
+    // Deduplication: if this cron already ran successfully for tomorrow's date
+    // (e.g. a retry or double-fire), skip to avoid spamming subscribers.
+    const alreadySent = await hasAlreadySentForDate(tomorrowStr);
+    if (alreadySent) {
+      logger.info("Already sent notifications for this date, skipping", { date: tomorrowStr });
+      await writeLastRunLog({ runAt: new Date().toISOString(), collectionDate: tomorrowStr, sent: 0, failed: 0, skipped: true });
+      return NextResponse.json({ sent: 0, reason: "already_sent_for_date" });
+    }
   }
 
   const subscriptions = await readSubscriptions();
@@ -92,5 +102,18 @@ export async function GET(request: NextRequest) {
   }
 
   logger.info("Push notifications sent", { sent, failed: failed.length, tomorrow: tomorrowStr });
+
+  // Persist run result for /api/notify-status and mark date as sent (dedup).
+  if (!force) {
+    if (sent > 0) await markDateAsSent(tomorrowStr);
+    await writeLastRunLog({
+      runAt: new Date().toISOString(),
+      collectionDate: tomorrowStr,
+      sent,
+      failed: failed.length,
+      skipped: false,
+    });
+  }
+
   return NextResponse.json({ sent, failed: failed.length });
 }
