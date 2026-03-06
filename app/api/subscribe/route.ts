@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    addSubscription(body);
+    await addSubscription(body);
     logger.info("Push subscription added", { endpoint: body.endpoint.slice(0, 40) });
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (err) {
@@ -59,7 +59,7 @@ export async function DELETE(request: NextRequest) {
   }
 
   try {
-    removeSubscription(body.endpoint);
+    await removeSubscription(body.endpoint);
     logger.info("Push subscription removed", { endpoint: body.endpoint.slice(0, 40) });
     return NextResponse.json({ success: true });
   } catch (err) {

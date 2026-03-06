@@ -75,8 +75,11 @@ const VALID_SUB = {
   keys: { p256dh: "p256dh", auth: "auth" },
 } as import("web-push").PushSubscription;
 
-function makeRequest(headers: Record<string, string> = {}): NextRequest {
-  return new NextRequest("http://localhost:3000/api/notify", { headers });
+function makeRequest(headers: Record<string, string> = {}, url = "http://localhost:3000/api/notify"): NextRequest {
+  return new NextRequest(url, { headers });
+}
+function makeForceRequest(): NextRequest {
+  return makeRequest({}, "http://localhost:3000/api/notify?force=true");
 }
 
 describe("GET /api/notify", () => {
@@ -223,5 +226,49 @@ describe("GET /api/notify", () => {
     const json = await res.json();
     expect(json.sent).toBe(1);
     expect(json.failed).toBe(1);
+  });
+});
+
+// ───────────── ?force=true (dev-only) ─────────────
+
+describe("GET /api/notify?force=true (development mode)", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    delete process.env.CRON_SECRET;
+    // NODE_ENV is 'test' in Jest which is !== 'production', so force=true is honoured
+    mockedReadSubscriptions.mockReturnValue([VALID_SUB]);
+    // Data with NO collections tomorrow — force should bypass this
+    mockedGetGeoJsonData.mockResolvedValue(
+      makeDataWithDate("Mo. 01.01.2222") as ReturnType<typeof getGeoJsonData> extends Promise<infer T> ? T : never
+    );
+  });
+
+  it("sends notification even when there are no collections tomorrow", async () => {
+    const res = await GET(makeForceRequest());
+    const json = await res.json();
+    expect(res.status).toBe(200);
+    expect(json.sent).toBe(1);
+  });
+
+  it("uses the real notification title (no [Test] prefix)", async () => {
+    await GET(makeForceRequest());
+    const payload = JSON.parse(mockedSendNotification.mock.calls[0][1] as string);
+    expect(payload.title).toBe("Sperrmüll morgen!");
+    expect(payload.title).not.toContain("[Test]");
+  });
+
+  it("payload body contains the next collection date from data", async () => {
+    await GET(makeForceRequest());
+    const payload = JSON.parse(mockedSendNotification.mock.calls[0][1] as string);
+    // getNextCollectionDateFromData falls back to tomorrowStr when no future dates exist,
+    // but it must contain a date-like string (DD.MM.YYYY)
+    expect(payload.body).toMatch(/\d{2}\.\d{2}\.\d{4}/);
+  });
+
+  it("does NOT send when data is unavailable even with force=true", async () => {
+    mockedGetGeoJsonData.mockRejectedValue(new Error("data_unavailable"));
+    const res = await GET(makeForceRequest());
+    expect(res.status).toBe(500);
+    expect(mockedSendNotification).not.toHaveBeenCalled();
   });
 });

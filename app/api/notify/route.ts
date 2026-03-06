@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import webpush from "web-push";
 import { readSubscriptions, removeSubscription } from "@/lib/subscriptions";
 import { getGeoJsonData } from "@/lib/dataCache";
-import { parseGermanDate } from "@/lib/dateUtils";
+import { parseGermanDate, getNextCollectionDateFromData } from "@/lib/dateUtils";
 import logger from "@/lib/logger";
 
 webpush.setVapidDetails(
@@ -22,6 +22,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
+  // In development, ?force=true triggers an immediate test notification skipping the
+  // "is there a collection tomorrow?" check. This is only honoured outside production.
+  const { searchParams } = new URL(request.url);
+  const isDev = process.env.NODE_ENV !== "production";
+  const force = isDev && searchParams.get("force") === "true";
+
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const dd = String(tomorrow.getDate()).padStart(2, "0");
@@ -36,30 +42,35 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "data_unavailable" }, { status: 500 });
   }
 
-  // Check if any collection happens tomorrow
-  const hasTomorrow = data.features.some((f) => {
-    const schedules = f.properties?.waste_schedules as Record<string, string[]> | undefined;
-    if (!schedules) return false;
-    return Object.values(schedules).some((dates) =>
-      Array.isArray(dates) &&
-      dates.some((d) => {
-        try { return parseGermanDate(d).toDateString() === tomorrow.toDateString(); } catch { return false; }
-      })
-    );
-  });
+  // Check if any collection happens tomorrow (skipped when force=true in dev)
+  if (!force) {
+    const hasTomorrow = data.features.some((f) => {
+      const schedules = f.properties?.waste_schedules as Record<string, string[]> | undefined;
+      if (!schedules) return false;
+      return Object.values(schedules).some((dates) =>
+        Array.isArray(dates) &&
+        dates.some((d) => {
+          try { return parseGermanDate(d).toDateString() === tomorrow.toDateString(); } catch { return false; }
+        })
+      );
+    });
 
-  if (!hasTomorrow) {
-    logger.info("No collections tomorrow, skipping notifications", { tomorrow: tomorrowStr });
-    return NextResponse.json({ sent: 0, reason: "no_collections_tomorrow" });
+    if (!hasTomorrow) {
+      logger.info("No collections tomorrow, skipping notifications", { tomorrow: tomorrowStr });
+      return NextResponse.json({ sent: 0, reason: "no_collections_tomorrow" });
+    }
   }
 
-  const subscriptions = readSubscriptions();
+  const subscriptions = await readSubscriptions();
   let sent = 0;
   const failed: string[] = [];
 
+  // For force mode in dev, find the actual next collection date instead of just using tomorrow
+  const notifyDateStr = force ? getNextCollectionDateFromData(data, tomorrowStr) : tomorrowStr;
+
   const payload = JSON.stringify({
     title: "Sperrmüll morgen!",
-    body: `Am ${tomorrowStr} ist Sperrmüll-Abfuhr. Jetzt überprüfen wo in deiner Nähe.`,
+    body: `Am ${notifyDateStr} ist Sperrmüll-Abfuhr. Drücke um zu erfahren wo.`,
     url: "/",
   });
 
@@ -71,7 +82,7 @@ export async function GET(request: NextRequest) {
       const statusCode = (err as { statusCode?: number }).statusCode;
       if (statusCode === 404 || statusCode === 410) {
         // Subscription expired/gone — remove it
-        removeSubscription(sub.endpoint);
+        await removeSubscription(sub.endpoint);
         failed.push("expired");
       } else {
         failed.push(String(err));
