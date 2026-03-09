@@ -16,6 +16,7 @@ interface SidePanelProps {
   onStreetClick?: (feature: WasteFeature) => void;
   onMobileStateChange?: (state: "hidden" | "peek" | "full") => void;
   filterDate?: string;
+  nextCollectionDate?: string;
 }
 
 export default function SidePanel({
@@ -25,6 +26,7 @@ export default function SidePanel({
   onStreetClick,
   onMobileStateChange,
   filterDate = "",
+  nextCollectionDate = "",
 }: SidePanelProps) {
   const [sortOrder, setSortOrder] = useState<"closest" | "furthest">(config.defaultSortOrder);
   const [isMobile, setIsMobile] = useState(false);
@@ -106,6 +108,9 @@ export default function SidePanel({
         : "h-[48px]";
 
   const mobilePreview = sorted.slice(0, 2);
+  const headerDateLabel = (nextCollectionDate || filterDate)
+    ? `${(nextCollectionDate || filterDate).replace(/^[A-Za-z]+\.\s*/, "")} (ab 06:30)`
+    : "-";
 
   return (
     <>
@@ -113,7 +118,7 @@ export default function SidePanel({
         {/* Header */}
         <div className="flex items-center justify-between border-b px-3 py-2">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-sm">Nächste Sperrmüll Abholung <span className="whitespace-nowrap">{filterDate}</span></span>
+            <span className="font-semibold text-sm">Nächste Sperrmüll Abholung <span className="whitespace-nowrap">{headerDateLabel}</span></span>
             <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
               {features.length}
             </span>
@@ -139,7 +144,6 @@ export default function SidePanel({
           ) : sorted.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-2 p-8 text-center text-gray-400">
               <CalendarX className="h-10 w-10" />
-              <p className="text-sm">Heute keine Sperrmüll-Abfuhr geplant.</p>
               <NotificationButton />
               <EmailSubscribeForm />
             </div>
@@ -222,7 +226,7 @@ export default function SidePanel({
           <>
             <div className="flex items-center justify-between border-b px-3 py-2">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-sm">Nächste Sperrmüll Abholung <span className="whitespace-nowrap">{filterDate}</span></span>
+                <span className="font-semibold text-sm">Nächste Sperrmüll Abholung <span className="whitespace-nowrap">{headerDateLabel}</span></span>
                 <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
                   {features.length}
                 </span>
@@ -247,7 +251,6 @@ export default function SidePanel({
               ) : sorted.length === 0 ? (
                 <div className="flex flex-col items-center justify-center gap-2 p-8 text-center text-gray-400">
                   <CalendarX className="h-10 w-10" />
-                  <p className="text-sm">Heute keine Sperrmüll-Abfuhr geplant.</p>
                   <NotificationButton />
                   <EmailSubscribeForm />
                 </div>

@@ -233,3 +233,11 @@ export function getNextCollectionDateFromData(
 
   return earliest?.raw ?? startDateStr;
 }
+
+export function getNoCollectionMessage(selectedDateStr: string, nextCollectionDateStr?: string): string {
+  if (nextCollectionDateStr && nextCollectionDateStr !== selectedDateStr) {
+    return `Am ${selectedDateStr} keine Sperrmüll-Abfuhr geplant. Nächste Abholung am ${nextCollectionDateStr}.`;
+  }
+
+  return `Am ${selectedDateStr} keine Sperrmüll-Abfuhr geplant.`;
+}

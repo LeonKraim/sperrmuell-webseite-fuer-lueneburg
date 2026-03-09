@@ -115,6 +115,22 @@ describe("GET /api/export", () => {
     expect(response.headers.get("Cache-Control")).toBe("no-store");
   });
 
+  it("exports the explicitly selected date instead of the default current date", async () => {
+    const response = await GET(createRequest("format=geojson&overrideDate=27.01.2026&overrideTime=05:00&selectedDate=26.01.2026"));
+    const content = await response.text();
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("Content-Disposition")).toContain("sperrmuell_today_26.01.2026.geojson");
+    expect(content).toContain('"features": []');
+  });
+
+  it("uses the actual collection date in the filename after the 06:30 cutoff", async () => {
+    const response = await GET(createRequest("format=geojson&overrideDate=27.01.2026&overrideTime=07:00"));
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("Content-Disposition")).toContain("sperrmuell_today_28.01.2026.geojson");
+  });
+
   it("returns 429 when rate limited", async () => {
     mockedCheckRateLimit.mockReturnValue(false);
     const response = await GET(createRequest());

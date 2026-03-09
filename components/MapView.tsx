@@ -11,25 +11,35 @@ const LeafletMap = dynamic(() => import("./LeafletMap"), { ssr: false });
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 interface MapViewProps {
-  onDataLoaded?: (features: WasteFeature[], filterDate: string) => void;
+  onDataLoaded?: (data: WasteFeatureCollection) => void;
   onLoadingChange?: (loading: boolean) => void;
   selectedFeature?: WasteFeature | null;
   onPositionChange?: (pos: [number, number]) => void;
   override?: { date?: string; time?: string } | undefined;
+  selectedDate?: string;
+  mobileBottomOffset?: string;
+  isMobile?: boolean;
 }
 
-export default function MapView({ onDataLoaded, onLoadingChange, selectedFeature, onPositionChange, override }: MapViewProps) {
-  // Build API URL with override parameters if provided
+export default function MapView({
+  onDataLoaded,
+  onLoadingChange,
+  selectedFeature,
+  onPositionChange,
+  override,
+  selectedDate,
+  mobileBottomOffset,
+  isMobile = false,
+}: MapViewProps) {
   const apiUrl = useMemo(() => {
-    if (!override) return "/api/today";
-    
     const params = new URLSearchParams();
-    if (override.date) params.append("overrideDate", override.date);
-    if (override.time) params.append("overrideTime", override.time);
+    if (override?.date) params.append("overrideDate", override.date);
+    if (override?.time) params.append("overrideTime", override.time);
+    if (selectedDate) params.append("selectedDate", selectedDate);
     
     const queryString = params.toString();
     return queryString ? `/api/today?${queryString}` : "/api/today";
-  }, [override]);
+  }, [override, selectedDate]);
 
   const { data, error, isLoading } = useSWR<WasteFeatureCollection>(apiUrl, fetcher);
 
@@ -39,7 +49,7 @@ export default function MapView({ onDataLoaded, onLoadingChange, selectedFeature
 
   useEffect(() => {
     if (data?.features && onDataLoaded) {
-      onDataLoaded(data.features, data.filterDate || "");
+      onDataLoaded(data);
     }
   }, [data, onDataLoaded]);
 
@@ -57,6 +67,10 @@ export default function MapView({ onDataLoaded, onLoadingChange, selectedFeature
       isLoading={isLoading}
       selectedFeature={selectedFeature ?? null}
       onPositionChange={onPositionChange}
+      mobileBottomOffset={mobileBottomOffset}
+      isMobile={isMobile}
+      selectedDate={selectedDate}
+      override={override}
     />
   );
 }

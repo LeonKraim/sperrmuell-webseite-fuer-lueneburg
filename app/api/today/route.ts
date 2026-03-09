@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getGeoJsonData } from "@/lib/dataCache";
 import { filterByDate } from "@/lib/geojson";
-import { getGarbageCollectionDate, getGarbageCollectionDateFormatted, getNextCollectionDateFromData } from "@/lib/dateUtils";
-import { getOverrideFromParams } from "@/lib/dateOverride";
+import { formatAsGermanDate, getGarbageCollectionDate, getNextCollectionDateFromData } from "@/lib/dateUtils";
+import { getOverrideFromParams, parseDDMMYYYY } from "@/lib/dateOverride";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import logger from "@/lib/logger";
 import crypto from "crypto";
@@ -20,17 +20,17 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const override = getOverrideFromParams(searchParams);
+    const selectedDateParam = searchParams.get("selectedDate");
 
     const data = await getGeoJsonData();
-    const collectionDateStr = getGarbageCollectionDate(override);
+    const collectionDateStr = selectedDateParam
+      ? formatAsGermanDate(parseDDMMYYYY(selectedDateParam))
+      : getGarbageCollectionDate(override);
 
-    logger.info("Filtering by date", { dateString: collectionDateStr });
+    logger.info("Filtering by date", { dateString: collectionDateStr, selectedDateParam });
     const filtered = filterByDate(data, collectionDateStr);
 
-    // For display text: show the next date that actually has collections
-    const nextDateStr = getNextCollectionDateFromData(data, collectionDateStr);
-    const nextDatePart = nextDateStr.replace(/^[A-Za-z]+\.\s*/, "");
-    filtered.filterDate = `${nextDatePart}  (ab 06:30)`;
+    filtered.nextCollectionDate = getNextCollectionDateFromData(data, collectionDateStr);
 
     logger.info("API today response", {
       ipHash,

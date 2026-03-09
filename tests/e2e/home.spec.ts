@@ -30,4 +30,22 @@ test.describe('Home Page', () => {
     // Verify page loads in mobile view
     await expect(page).toHaveTitle(/.*/);
   });
+
+  test('should align export button with the credit badge on mobile', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto('/');
+
+    const exportButton = page.getByRole('button', { name: 'Export data' });
+    const creditBadge = page.getByTitle('Made by Leon Kraim');
+
+    await expect(exportButton).toBeVisible();
+    await expect(creditBadge).toBeVisible();
+
+    const exportBox = await exportButton.boundingBox();
+    const creditBox = await creditBadge.boundingBox();
+
+    expect(exportBox).not.toBeNull();
+    expect(creditBox).not.toBeNull();
+    expect(Math.abs((exportBox?.y ?? 0) - (creditBox?.y ?? 0))).toBeLessThanOrEqual(2);
+  });
 });
