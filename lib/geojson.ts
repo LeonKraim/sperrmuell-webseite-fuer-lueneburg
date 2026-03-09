@@ -19,6 +19,7 @@ export interface WasteFeatureCollection {
   type: "FeatureCollection";
   date: string;
   filterDate?: string; // The German-formatted date used for filtering (e.g., "Sa. 26.12.2026")
+  nextCollectionDate?: string;
   features: WasteFeature[];
 }
 

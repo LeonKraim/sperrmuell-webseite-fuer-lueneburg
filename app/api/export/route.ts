@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getGeoJsonData } from "@/lib/dataCache";
 import { filterByDate } from "@/lib/geojson";
-import { getGarbageCollectionDate, formatDateAsDDMMYYYY } from "@/lib/dateUtils";
-import { getOverrideFromParams, getOverriddenDate } from "@/lib/dateOverride";
+import { formatAsGermanDate, formatDateAsDDMMYYYY, getGarbageCollectionDate, parseGermanDate } from "@/lib/dateUtils";
+import { getOverrideFromParams, parseDDMMYYYY } from "@/lib/dateOverride";
 import { serializeExport } from "@/lib/exportFormats";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import logger from "@/lib/logger";
@@ -39,9 +39,12 @@ export async function GET(request: NextRequest) {
 
   try {
     const override = getOverrideFromParams(searchParams);
+    const selectedDateParam = searchParams.get("selectedDate");
     const data = await getGeoJsonData();
-    const collectionDateStr = getGarbageCollectionDate(override);
-    const isoDate = formatDateAsDDMMYYYY(getOverriddenDate(override));
+    const collectionDateStr = selectedDateParam
+      ? formatAsGermanDate(parseDDMMYYYY(selectedDateParam))
+      : getGarbageCollectionDate(override);
+    const isoDate = formatDateAsDDMMYYYY(parseGermanDate(collectionDateStr));
     const cacheKey = getCacheKey(isoDate, format);
 
     let content: string;
@@ -67,6 +70,7 @@ export async function GET(request: NextRequest) {
     logger.info("Export", {
       ipHash,
       format,
+      collectionDateStr,
       durationMs: Date.now() - start,
     });
 

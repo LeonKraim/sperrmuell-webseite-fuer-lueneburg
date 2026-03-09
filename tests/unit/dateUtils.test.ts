@@ -9,6 +9,7 @@ import {
   getGarbageCollectionDate,
   getGarbageCollectionDateFormatted,
   getNextCollectionDateFromData,
+  getNoCollectionMessage,
   ParseError,
 } from "@/lib/dateUtils";
 
@@ -551,5 +552,19 @@ describe("getNextCollectionDateFromData", () => {
     };
     // Non-array value should be skipped without throwing
     expect(() => getNextCollectionDateFromData(data, "Sa. 07.03.2026")).not.toThrow();
+  });
+});
+
+describe("getNoCollectionMessage", () => {
+  it("mentions the next collection date when it differs from the selected day", () => {
+    expect(getNoCollectionMessage("Mi. 12.03.2026", "Fr. 14.03.2026")).toBe(
+      "Am Mi. 12.03.2026 keine Sperrmüll-Abfuhr geplant. Nächste Abholung am Fr. 14.03.2026."
+    );
+  });
+
+  it("omits the next collection sentence when the selected day already matches", () => {
+    expect(getNoCollectionMessage("Fr. 14.03.2026", "Fr. 14.03.2026")).toBe(
+      "Am Fr. 14.03.2026 keine Sperrmüll-Abfuhr geplant."
+    );
   });
 });

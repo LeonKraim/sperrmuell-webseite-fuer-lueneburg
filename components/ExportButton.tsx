@@ -4,7 +4,14 @@ import { useState } from "react";
 import { Download, ChevronDown, Loader2 } from "lucide-react";
 import config from "@/config";
 
-export default function ExportButton() {
+interface ExportButtonProps {
+  mobileBottomOffset?: string;
+  isMobile?: boolean;
+  selectedDate?: string;
+  override?: { date?: string; time?: string };
+}
+
+export default function ExportButton({ mobileBottomOffset, isMobile = false, selectedDate, override }: ExportButtonProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -14,7 +21,11 @@ export default function ExportButton() {
     setLoading(true);
     showToast("Download started");
     try {
-      window.location.href = `/api/export?format=${format}`;
+      const params = new URLSearchParams({ format });
+      if (selectedDate) params.set("selectedDate", selectedDate);
+      if (override?.date) params.set("overrideDate", override.date);
+      if (override?.time) params.set("overrideTime", override.time);
+      window.location.href = `/api/export?${params.toString()}`;
       setTimeout(() => setLoading(false), 2000);
     } catch {
       showToast("Export failed");
@@ -28,7 +39,10 @@ export default function ExportButton() {
   };
 
   return (
-    <div className="absolute top-3 right-3 z-[1000]">
+    <div
+      className="fixed right-4 z-[1200] md:absolute md:right-3 md:top-3 md:z-[1000]"
+      style={isMobile ? { bottom: mobileBottomOffset } : undefined}
+    >
       <div className="relative">
         <button
           onClick={() => setOpen((o) => !o)}
@@ -61,7 +75,7 @@ export default function ExportButton() {
       </div>
 
       {toast && (
-        <div className="absolute right-0 top-full mt-2 rounded-lg bg-gray-800 px-3 py-1.5 text-sm text-white shadow-lg">
+        <div className="absolute bottom-full right-0 mb-2 rounded-lg bg-gray-800 px-3 py-1.5 text-sm text-white shadow-lg md:bottom-auto md:top-full md:mb-0 md:mt-2">
           {toast}
         </div>
       )}

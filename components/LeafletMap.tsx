@@ -25,9 +25,22 @@ interface LeafletMapProps {
   isLoading: boolean;
   selectedFeature: WasteFeature | null;
   onPositionChange?: (pos: [number, number]) => void;
+  mobileBottomOffset?: string;
+  isMobile?: boolean;
+  selectedDate?: string;
+  override?: { date?: string; time?: string };
 }
 
-export default function LeafletMap({ features, isLoading, selectedFeature, onPositionChange }: LeafletMapProps) {
+export default function LeafletMap({
+  features,
+  isLoading,
+  selectedFeature,
+  onPositionChange,
+  mobileBottomOffset,
+  isMobile = false,
+  selectedDate,
+  override,
+}: LeafletMapProps) {
   const [userPos, setUserPos] = useState<[number, number] | null>(null);
   const [isFirstFix, setIsFirstFix] = useState(true);
   const [gpsStatus, setGpsStatus] = useState<"pending" | "granted" | "denied">("pending");
@@ -77,19 +90,16 @@ export default function LeafletMap({ features, isLoading, selectedFeature, onPos
         <PanToFeature feature={selectedFeature} />
       </MapContainer>
 
-      <ExportButton />
+      <ExportButton
+        mobileBottomOffset={mobileBottomOffset}
+        isMobile={isMobile}
+        selectedDate={selectedDate}
+        override={override}
+      />
 
       {isLoading && (
         <div className="absolute inset-0 z-[500] flex items-center justify-center bg-white/40">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-red-500" />
-        </div>
-      )}
-
-      {!isLoading && features.length === 0 && (
-        <div className="absolute inset-x-0 top-4 z-[500] flex justify-center">
-          <div className="rounded-lg bg-white px-4 py-2 text-sm text-gray-600 shadow">
-            Heute keine Sperrmüll-Abfuhr geplant.
-          </div>
         </div>
       )}
 

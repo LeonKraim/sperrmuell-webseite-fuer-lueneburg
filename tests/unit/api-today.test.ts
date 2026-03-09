@@ -81,6 +81,12 @@ describe("GET /api/today", () => {
     expect(typeof json.filterDate).toBe("string");
   });
 
+  it("returns nextCollectionDate in response", async () => {
+    const response = await GET(createRequest("http://localhost:3000/api/today?selectedDate=26.01.2026"));
+    const json = await response.json();
+    expect(json.nextCollectionDate).toBe("Di. 27.01.2026");
+  });
+
   it("sets Cache-Control to no-store", async () => {
     const response = await GET(createRequest());
     expect(response.headers.get("Cache-Control")).toBe("no-store");
@@ -126,6 +132,14 @@ describe("GET /api/today", () => {
     expect(response.status).toBe(200);
     // With override date Jan 27 2026 at 05:00 (before 06:30), should filter for Jan 27
     expect(json.features).toBeDefined();
+  });
+
+  it("filters by an explicitly selected date", async () => {
+    const response = await GET(createRequest("http://localhost:3000/api/today?selectedDate=26.01.2026"));
+    const json = await response.json();
+    expect(response.status).toBe(200);
+    expect(json.filterDate).toBe("Mo. 26.01.2026");
+    expect(json.features).toEqual([]);
   });
 });
 
