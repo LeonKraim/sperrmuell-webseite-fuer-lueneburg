@@ -48,4 +48,18 @@ test.describe('Home Page', () => {
     expect(creditBox).not.toBeNull();
     expect(Math.abs((exportBox?.y ?? 0) - (creditBox?.y ?? 0))).toBeLessThanOrEqual(2);
   });
+
+  test('should let the user jump to a selected date with the date picker', async ({ page }) => {
+    await page.goto('/');
+
+    const dateInput = page.locator('input[type="date"][aria-label="Datum auswählen"]');
+    await expect(dateInput).toBeEnabled();
+
+    await Promise.all([
+      page.waitForResponse((response) => response.url().includes('selectedDate=31.12.2026') && response.ok()),
+      dateInput.fill('2026-12-31'),
+    ]);
+
+    await expect(dateInput).toHaveValue('2026-12-31');
+  });
 });
