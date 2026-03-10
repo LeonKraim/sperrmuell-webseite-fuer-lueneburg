@@ -1,0 +1,108 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e5]:
+        - button "Vorheriger Tag" [disabled] [ref=e6]:
+          - img [ref=e7]
+        - generic [ref=e9]: Di. 10.03.2026
+        - generic [ref=e10]:
+          - textbox "Datum auswählen" [active]: 2026-03-10
+          - button "Datum auswählen" [ref=e11] [cursor=pointer]:
+            - img [ref=e12]
+        - button "Nächster Tag" [ref=e14] [cursor=pointer]:
+          - img [ref=e15]
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - generic:
+            - generic:
+              - img
+          - generic:
+            - generic [ref=e133]:
+              - button "Zoom in" [ref=e134] [cursor=pointer]: +
+              - button "Zoom out" [ref=e135] [cursor=pointer]: −
+            - generic [ref=e136]:
+              - link "Leaflet" [ref=e137] [cursor=pointer]:
+                - /url: https://leafletjs.com
+                - img [ref=e138]
+                - text: Leaflet
+              - text: "| © OpenStreetMap contributors"
+        - button "Export data" [ref=e144] [cursor=pointer]:
+          - img [ref=e145]
+          - text: Export
+          - img [ref=e148]
+        - generic [ref=e150]: Standort nicht verfügbar
+      - link "Made by Leon Kraim" [ref=e151] [cursor=pointer]:
+        - /url: https://github.com/LeonKraim
+    - generic [ref=e152]:
+      - generic [ref=e153]:
+        - generic [ref=e154]:
+          - generic [ref=e155]: Nächste Sperrmüll Abholung 10.03.2026 (ab 06:30)
+          - generic [ref=e156]: "114"
+        - button "Closest" [ref=e157] [cursor=pointer]:
+          - img [ref=e158]
+          - text: Closest
+      - generic [ref=e162]:
+        - button "Achtern Immhoff Brietlingen" [ref=e164] [cursor=pointer]:
+          - generic [ref=e165]: Achtern Immhoff
+          - generic [ref=e166]: Brietlingen
+        - button "Achtern Kinnergoorn Brietlingen" [ref=e168] [cursor=pointer]:
+          - generic [ref=e169]: Achtern Kinnergoorn
+          - generic [ref=e170]: Brietlingen
+        - button "Adolf-Reichwein-Str. Lüneburg" [ref=e172] [cursor=pointer]:
+          - generic [ref=e173]: Adolf-Reichwein-Str.
+          - generic [ref=e174]: Lüneburg
+        - button "Alfred-Delp-Str. Lüneburg" [ref=e176] [cursor=pointer]:
+          - generic [ref=e177]: Alfred-Delp-Str.
+          - generic [ref=e178]: Lüneburg
+        - button "Alt Moorburg Brietlingen" [ref=e180] [cursor=pointer]:
+          - generic [ref=e181]: Alt Moorburg
+          - generic [ref=e182]: Brietlingen
+        - button "Alte Dorfstr. Barum" [ref=e184] [cursor=pointer]:
+          - generic [ref=e185]: Alte Dorfstr.
+          - generic [ref=e186]: Barum
+        - button "Am Bültenmoor Brietlingen" [ref=e188] [cursor=pointer]:
+          - generic [ref=e189]: Am Bültenmoor
+          - generic [ref=e190]: Brietlingen
+        - button "Am Gemeindehaus Brietlingen" [ref=e192] [cursor=pointer]:
+          - generic [ref=e193]: Am Gemeindehaus
+          - generic [ref=e194]: Brietlingen
+        - button "Am Ilmenautal (Horburg) Barum" [ref=e196] [cursor=pointer]:
+          - generic [ref=e197]: Am Ilmenautal (Horburg)
+          - generic [ref=e198]: Barum
+        - button "Am Lindenhof Brietlingen" [ref=e200] [cursor=pointer]:
+          - generic [ref=e201]: Am Lindenhof
+          - generic [ref=e202]: Brietlingen
+        - button "Am See Barum" [ref=e204] [cursor=pointer]:
+          - generic [ref=e205]: Am See
+          - generic [ref=e206]: Barum
+        - button "Am Sportplatz Barum" [ref=e208] [cursor=pointer]:
+          - generic [ref=e209]: Am Sportplatz
+          - generic [ref=e210]: Barum
+        - button "Am Sportplatz Brietlingen" [ref=e212] [cursor=pointer]:
+          - generic [ref=e213]: Am Sportplatz
+          - generic [ref=e214]: Brietlingen
+        - button "Amselweg Barum" [ref=e216] [cursor=pointer]:
+          - generic [ref=e217]: Amselweg
+          - generic [ref=e218]: Barum
+        - button "Amselweg Brietlingen" [ref=e220] [cursor=pointer]:
+          - generic [ref=e221]: Amselweg
+          - generic [ref=e222]: Brietlingen
+        - button "An der Bennerstedt Brietlingen" [ref=e224] [cursor=pointer]:
+          - generic [ref=e225]: An der Bennerstedt
+          - generic [ref=e226]: Brietlingen
+        - button "Auf dem Acker Barum" [ref=e228] [cursor=pointer]:
+          - generic [ref=e229]: Auf dem Acker
+          - generic [ref=e230]: Barum
+        - button "Auf dem Weidedeich (Horburg) Barum" [ref=e232] [cursor=pointer]:
+          - generic [ref=e233]: Auf dem Weidedeich (Horburg)
+          - generic [ref=e234]: Barum
+        - button "Bei der Schmiede Brietlingen" [ref=e236] [cursor=pointer]:
+          - generic [ref=e237]: Bei der Schmiede
+          - generic [ref=e238]: Brietlingen
+  - button "Open Next.js Dev Tools" [ref=e244] [cursor=pointer]:
+    - img [ref=e245]
+  - alert [ref=e248]
+```

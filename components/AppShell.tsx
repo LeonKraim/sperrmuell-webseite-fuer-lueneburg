@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useCallback, useEffect, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import LoadingBar from "./LoadingBar";
 import Throbber from "./Throbber";
 import AdBanner from "./AdBanner";
@@ -17,6 +17,7 @@ const MapView = dynamic(() => import("./MapView"), { ssr: false });
 
 export default function AppShell() {
   const searchParams = useSearchParams();
+  const dateInputRef = useRef<HTMLInputElement>(null);
   const [features, setFeatures] = useState<WasteFeature[]>([]);
   const [filterDate, setFilterDate] = useState<string>("");
   const [nextCollectionDate, setNextCollectionDate] = useState<string>("");
@@ -48,6 +49,61 @@ export default function AppShell() {
       return undefined;
     }
   }, [baseDate, dayOffset]);
+
+  const maxDayOffset = useMemo(() => {
+    if (!baseDate) {
+      return 0;
+    }
+
+    try {
+      const startDate = parseGermanDate(baseDate);
+      const endDate = new Date(startDate.getFullYear(), 11, 31);
+      return Math.round((endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000));
+    } catch {
+      return 0;
+    }
+  }, [baseDate]);
+
+  const minSelectableDate = useMemo(() => {
+    if (!baseDate) {
+      return "";
+    }
+
+    try {
+      const startDate = parseGermanDate(baseDate);
+      const [day, month, year] = formatDateAsDDMMYYYY(startDate).split(".");
+      return `${year}-${month}-${day}`;
+    } catch {
+      return "";
+    }
+  }, [baseDate]);
+
+  const maxSelectableDate = useMemo(() => {
+    if (!baseDate) {
+      return "";
+    }
+
+    try {
+      const startDate = parseGermanDate(baseDate);
+      return `${startDate.getFullYear()}-12-31`;
+    } catch {
+      return "";
+    }
+  }, [baseDate]);
+
+  const selectedInputDateValue = useMemo(() => {
+    const activeDate = selectedDateParam || minSelectableDate;
+    if (!activeDate) {
+      return "";
+    }
+
+    const [day, month, year] = activeDate.split(".");
+    if (year && month && day) {
+      return `${year}-${month}-${day}`;
+    }
+
+    return activeDate;
+  }, [minSelectableDate, selectedDateParam]);
 
   const handleDataLoaded = useCallback((data: WasteFeatureCollection) => {
     setFeatures(data.features);
@@ -90,12 +146,45 @@ export default function AppShell() {
         : "48px";
 
   const canGoBack = dayOffset > 0;
-  const canGoForward = Boolean(baseDate) && dayOffset < 7;
+  const canGoForward = Boolean(baseDate) && dayOffset < maxDayOffset;
 
   const moveByDays = (delta: number) => {
     setSelectedFeature(null);
     setMapLoading(true);
-    setDayOffset((current) => Math.max(0, Math.min(7, current + delta)));
+    setDayOffset((current) => Math.max(0, Math.min(maxDayOffset, current + delta)));
+  };
+
+  const handleDateInputChange = (value: string) => {
+    if (!value || !baseDate) {
+      return;
+    }
+
+    try {
+      const startDate = parseGermanDate(baseDate);
+      const selectedDate = new Date(`${value}T00:00:00`);
+      const nextOffset = Math.round((selectedDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000));
+
+      setSelectedFeature(null);
+      setMapLoading(true);
+      setDayOffset(Math.max(0, Math.min(maxDayOffset, nextOffset)));
+    } catch {
+      // Ignore invalid manual input.
+    }
+  };
+
+  const openDatePicker = () => {
+    const input = dateInputRef.current;
+    if (!input) {
+      return;
+    }
+
+    if (typeof input.showPicker === "function") {
+      input.showPicker();
+      return;
+    }
+
+    input.focus();
+    input.click();
   };
 
   return (
@@ -124,8 +213,28 @@ export default function AppShell() {
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
-              <div className="min-w-[170px] px-2 text-center text-sm font-semibold text-gray-900">
-                {filterDate || "Datum wird geladen..."}
+              <div className="relative">
+                <input
+                  ref={dateInputRef}
+                  type="date"
+                  aria-label="Datum auswählen"
+                  min={minSelectableDate}
+                  max={maxSelectableDate}
+                  value={selectedInputDateValue}
+                  disabled={!baseDate}
+                  onChange={(event) => handleDateInputChange(event.target.value)}
+                  className="pointer-events-none absolute inset-0 h-full w-full opacity-0"
+                />
+                <button
+                  onClick={openDatePicker}
+                  disabled={!baseDate}
+                  className="flex min-w-[210px] items-center justify-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-gray-900 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-300"
+                  aria-label="Datum auswählen"
+                  title="Datum auswählen"
+                >
+                  <span>{filterDate || "Datum wird geladen..."}</span>
+                  <CalendarDays className="h-4 w-4" />
+                </button>
               </div>
               <button
                 onClick={() => moveByDays(1)}
