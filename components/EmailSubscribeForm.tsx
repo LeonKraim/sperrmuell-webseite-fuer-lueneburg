@@ -103,6 +103,8 @@ export default function EmailSubscribeForm() {
                 </div>
                 <p className="text-sm font-medium text-gray-800">Bestätigungs-E-Mail gesendet!</p>
                 <p className="text-xs text-gray-500">Bitte prüfe dein Postfach und klicke auf den Bestätigungslink.</p>
+                <p className="text-base font-semibold text-red-600">Bitte überprüfe auch deinen Spam-Ordner.</p>
+
                 <button
                   onClick={() => setOpen(false)}
                   className="mt-2 rounded-lg border border-gray-200 px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50"
