@@ -32,6 +32,7 @@ const config = {
   logFilePath: "./logs/app.log",
   logMaxSizeMb: 20,
   logMaxFiles: 5,
+  productionUrl: "https://lueneburg-sperrmuell-heute.vercel.app",
 };
 
 export default config;

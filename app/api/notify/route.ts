@@ -8,6 +8,7 @@ import { getGeoJsonData } from "@/lib/dataCache";
 import { parseGermanDate, getNextCollectionDateFromData } from "@/lib/dateUtils";
 import { hasAlreadySentForDate, markDateAsSent, writeLastRunLog } from "@/lib/notifyLog";
 import logger from "@/lib/logger";
+import config from "@/config";
 
 // This route is called by a cron job each morning.
 // It sends push notifications to all subscribers whose area has a Sperrmüll
@@ -111,7 +112,7 @@ export async function GET(request: NextRequest) {
   let emailFailed = 0;
   const baseUrl =
     process.env.NEXT_PUBLIC_BASE_URL ||
-    `https://${request.headers.get("x-forwarded-host") || request.headers.get("host")}`;
+    config.productionUrl;
   const emailSubs = await getConfirmedEmailSubs();
   for (const sub of emailSubs) {
     try {

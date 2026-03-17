@@ -4,6 +4,7 @@ import { sendEmail } from "@/lib/mailer";
 import { buildConfirmationEmail } from "@/lib/emailTemplates";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import logger from "@/lib/logger";
+import config from "@/config";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -27,9 +28,7 @@ export async function POST(request: NextRequest) {
 
   const baseUrl =
     process.env.NEXT_PUBLIC_BASE_URL ||
-    (request.headers.get("x-forwarded-host")
-      ? `https://${request.headers.get("x-forwarded-host")}`
-      : `https://${request.headers.get("host")}`);
+    config.productionUrl;
 
   try {
     const token = await addEmailSub(email);
