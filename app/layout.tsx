@@ -10,8 +10,8 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://lueneburg-sperrmuel
 
 export const metadata: Metadata = {
   title: "Sperrmüll Heute Abfuhrplan Karte - Landkreis Lüneburg",
-  description: "Finde Sperrmüll-Abfuhrtermine in deiner Nähe! Interaktive Karte mit aktuellen Abfuhrterminen im Landkreis Lüneburg. Offizielle Sperrmüll-Abfuhrdaten für den Landkreis Lüneburg.",
-  keywords: ["Sperrmüll", "Abfuhr", "Lüneburg", "Landkreis Lüneburg", "Abfallwirtschaft", "Müllabfuhr", "Karte", "Termin", "Sperrmüllabfuhr Lüneburg"],
+  description: "Finde Sperrmüll-Abfuhrtermine im Landkreis Lüneburg! Karte mit aktuellen Abfuhrterminen im Landkreis Lüneburg. Sperrmüll-Abfuhrdaten für den Landkreis Lüneburg.",
+  keywords: ["Sperrmüll", "Abfuhr", "Lüneburg", "Landkreis Lüneburg", "Abfallwirtschaft", "Müllabfuhr", "Karte", "Termin", "Sperrmüllabfuhr Lüneburg","Leon Kraim"],
   authors: [{ name: "Leon Kraim" }],
   creator: "Leon Kraim",
   publisher: "Leon Kraim",
@@ -78,8 +78,8 @@ export default function RootLayout({
         "@id": `${baseUrl}/#website`,
         url: baseUrl,
         name: "Sperrmüll Karte Landkreis Lüneburg",
-        description: "Interaktive Karte mit Sperrmüll-Abfuhrterminen im Landkreis Lüneburg - Offizielle Abfuhrdaten für den Landkreis Lüneburg",
-        potentialAction: {
+       description: "Finde Sperrmüll-Abfuhrtermine im Landkreis Lüneburg! Karte mit aktuellen Abfuhrterminen im Landkreis Lüneburg. Sperrmüll-Abfuhrdaten für den Landkreis Lüneburg.",
+      potentialAction: {
           "@type": "SearchAction",
           target: {
             "@type": "EntryPoint",
