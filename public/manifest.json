@@ -1,0 +1,12 @@
+{
+  "name": "Sperrmüll Heute in Lüneburg Abfuhrplan Karte",
+  "short_name": "Sperrmüll Karte Lüneburg",
+  "description": "Finde Sperrmüll-Abfuhrtermine im Landkreis Lüneburg heute! Interaktive Karte mit aktuellen Abfuhrterminen im Landkreis Lüneburg.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "categories": ["utilities", "productivity"]
+}
