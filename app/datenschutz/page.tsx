@@ -199,6 +199,7 @@ export default function DatenschutzPage() {
 
           {/* Kontaktaufnahme */}
           <Sub title="Kontaktaufnahme">
+            <p className="font-semibold text-gray-700">Art und Zweck der Verarbeitung</p>
             <p>
               Unabhängig von der gewählten Kommunikationsart erheben wir den Inhalt Ihrer Anfrage.
               Ihre Daten werden zum Zweck der individuellen Kommunikation mit Ihnen gespeichert.
@@ -261,6 +262,10 @@ export default function DatenschutzPage() {
                 Anmeldung zum Newsletter, den Versand einer Bestätigungsmail und den Eingang der
                 hiermit angeforderten Antwort. Weitere Daten werden nicht erhoben.
               </p>
+              <p>
+                Zum Zeitpunkt der Absendung des Anmeldeformulars werden zudem folgende Daten
+                gespeichert:
+              </p>
             </SubSub>
             <SubSub title="Rechtsgrundlage">
               <p>
@@ -310,6 +315,7 @@ export default function DatenschutzPage() {
                 werden oder zur Wiederverwendung einladen. Ebenso können wir nachvollziehen, welche
                 Bereiche der Anpassung bedürfen.
               </p>
+              <p>Welche Tools wir zur Reichweitenmessung einsetzen, finden Sie weiter unten.</p>
             </SubSub>
             <SubSub title="Rechtsgrundlage">
               <p>
@@ -324,10 +330,16 @@ export default function DatenschutzPage() {
                 die als unsere Auftragsverarbeiter tätig werden.
               </p>
             </SubSub>
+            <SubSub title="Speicherdauer">
+              <p>
+                Informationen zur Speicherdauer finden Sie in den unten aufgeführten Informationen
+                zu den eingesetzten Tools.
+              </p>
+            </SubSub>
             <SubSub title="Drittlandtransfer">
               <p>Die erhobenen Daten werden ggfs. in folgende Drittländer übertragen:</p>
               <p className="font-medium text-gray-800">USA</p>
-              <p>Folgende Datenschutzgarantien liegen vor: Angemessenheitsbeschluss der EU-Kommission</p>
+              <p>Folgende Datenschutzgarantien liegen vor:</p>
             </SubSub>
             <SubSub title="Bereitstellung vorgeschrieben oder erforderlich">
               <p>
@@ -339,6 +351,9 @@ export default function DatenschutzPage() {
                 Lesen Sie dazu die Informationen über Ihr Widerspruchsrecht nach Art. 21 DSGVO
                 weiter unten.
               </p>
+            </SubSub>
+            <SubSub title="Eingesetzte Tools zur Reichweitenmessung">
+              <p className="font-semibold text-gray-800">Google Search Console und Vercel Analytics</p>
             </SubSub>
           </Sub>
         </Section>
