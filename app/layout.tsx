@@ -1,7 +1,20 @@
 import type { Metadata } from "next";
-import Script from "next/script";
-import { Analytics } from "@vercel/analytics/next";
+import AnalyticsConsent from "@/components/AnalyticsConsent";
+import ConsentBanner from "@/components/ConsentBanner";
+import localFont from "next/font/local";
 import "./globals.css";
+
+const geistSans = localFont({
+  src: "./fonts/GeistVF.woff",
+  variable: "--font-geist-sans",
+  display: "swap",
+});
+
+const geistMono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
+  variable: "--font-geist-mono",
+  display: "swap",
+});
 
 // Diese Website zeigt Sperrmüll-Abfuhrtermine für den Landkreis Lüneburg
 // Alle Daten beziehen sich auf den Landkreis Lüneburg in Niedersachsen
@@ -116,7 +129,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="de">
+    <html lang="de" className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#ffffff" />
@@ -129,33 +142,9 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_PUBLISHER_ID && (
-          <Script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_PUBLISHER_ID}`}
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          />
-        )}
-        {/* Google Analytics - if configured */}
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="google-analytics" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
-              `}
-            </Script>
-          </>
-        )}
         {children}
-        <Analytics />
+        <AnalyticsConsent />
+        <ConsentBanner />
       </body>
     </html>
   );

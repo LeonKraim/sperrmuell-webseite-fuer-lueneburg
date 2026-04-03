@@ -75,7 +75,23 @@ export default function DatenschutzPage() {
             Verantwortlicher im Sinne der Datenschutzgesetze, insbesondere der
             EU-Datenschutz-Grundverordnung (DSGVO), ist:
           </p>
-          <p className="font-semibold text-gray-900">Leon Jamie Kraim</p>
+          <address className="not-italic">
+            <p className="font-semibold text-gray-900">Leon Jamie Kraim</p>
+            <p>Ringstraße 25, 21339 Lüneburg</p>
+            <p>
+              <a href="tel:+4915906117790" className="hover:text-blue-600 hover:underline">
+                015906117790
+              </a>
+            </p>
+            <p>
+              <a
+                href="mailto:offleon.kraim.bus+contact@gmail.com"
+                className="break-all hover:text-blue-600 hover:underline"
+              >
+                offleon.kraim.bus+contact@gmail.com
+              </a>
+            </p>
+          </address>
         </Section>
 
         {/* Betroffenenrechte */}
@@ -103,13 +119,18 @@ export default function DatenschutzPage() {
             für die Zukunft widerrufen.
           </p>
           <p>
-            Sie können sich jederzeit mit einer Beschwerde an eine Aufsichtsbehörde wenden, z. B.
-            an die zuständige Aufsichtsbehörde des Bundeslands Ihres Wohnsitzes oder an die für
-            uns als verantwortliche Stelle zuständige Behörde.
+            Sie können sich jederzeit mit einer Beschwerde an eine Aufsichtsbehörde wenden. Die
+            für uns zuständige Aufsichtsbehörde ist:
           </p>
+          <address className="not-italic rounded-lg border border-gray-100 bg-gray-50 p-4 text-sm">
+            <p className="font-semibold text-gray-900">Die Landesbeauftragte für den Datenschutz Niedersachsen (LfD Niedersachsen)</p>
+            <p>Prinzenstraße 5, 30159 Hannover</p>
+            <p><a href="tel:+495111204500" className="hover:text-blue-600 hover:underline">0511 120-4500</a></p>
+            <p><a href="https://www.lfd.niedersachsen.de" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.lfd.niedersachsen.de</a></p>
+          </address>
           <p>
-            Eine Liste der Aufsichtsbehörden (für den nichtöffentlichen Bereich) mit Anschrift
-            finden Sie unter:{" "}
+            Eine Liste aller Aufsichtsbehörden (für den nichtöffentlichen Bereich) finden Sie
+            unter:{" "}
             <a
               href="https://www.bfdi.bund.de/DE/Infothek/Anschriften_Links/anschriften_links-node.html"
               target="_blank"
@@ -124,12 +145,23 @@ export default function DatenschutzPage() {
 
         {/* Verarbeitungstätigkeiten */}
         <Section title="Verarbeitungstätigkeiten">
+
+          <Sub title="SSL/TLS-Verschlüsselung">
+            <p>
+              Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher
+              Inhalte eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen
+              Sie daran, dass die Adresszeile des Browsers von {'"'}http://{'"'} auf {'"'}https://{'"'} wechselt und
+              an dem Schloss-Symbol in Ihrer Browserzeile. Wenn die SSL- bzw. TLS-Verschlüsselung
+              aktiviert ist, können die Daten, die Sie an uns übermitteln, nicht von Dritten
+              mitgelesen werden.
+            </p>
+          </Sub>
+
           {/* Server-Logfiles */}
           <Sub title="Erfassung allgemeiner Informationen beim Besuch unserer Website">
             <SubSub title="Art und Zweck der Verarbeitung">
               <p>
-                Wenn Sie auf unsere Website zugreifen, d.h., wenn Sie sich nicht registrieren oder
-                anderweitig Informationen übermitteln, werden automatisch Informationen allgemeiner
+                Wenn Sie auf unsere Website zugreifen, werden automatisch Informationen allgemeiner
                 Natur erfasst. Diese Informationen (Server-Logfiles) beinhalten etwa die Art des
                 Webbrowsers, das verwendete Betriebssystem, den Domainnamen Ihres
                 Internet-Service-Providers, Ihre IP-Adresse und ähnliches.
@@ -161,7 +193,8 @@ export default function DatenschutzPage() {
             <SubSub title="Empfänger">
               <p>
                 Empfänger der Daten sind ggf. technische Dienstleister, die für den Betrieb und die
-                Wartung unserer Webseite als Auftragsverarbeiter tätig werden.
+                Wartung unserer Webseite als Auftragsverarbeiter tätig werden, insbesondere
+                Vercel Inc. (siehe Abschnitt {'"'}Hosting durch Vercel{'"'}).
               </p>
             </SubSub>
             <SubSub title="Speicherdauer">
@@ -176,10 +209,11 @@ export default function DatenschutzPage() {
               </p>
             </SubSub>
             <SubSub title="Drittlandtransfer">
-              <p>Die erhobenen Daten werden ggfs. in folgende Drittländer übertragen:</p>
-              <p className="font-medium text-gray-800">USA</p>
-              <p>Folgende Datenschutzgarantien liegen vor:</p>
-              <p>Angemessenheitsbeschluss der EU-Kommission</p>
+              <p>
+                Die Datenübertragung in die USA (Vercel Inc.) erfolgt auf Grundlage des
+                EU-U.S. Data Privacy Frameworks (DPF), da Vercel Inc. im DPF-Register der
+                U.S. Handelsministeriums eingetragen ist.
+              </p>
             </SubSub>
             <SubSub title="Bereitstellung vorgeschrieben oder erforderlich">
               <p>
@@ -195,6 +229,31 @@ export default function DatenschutzPage() {
                 weiter unten.
               </p>
             </SubSub>
+          </Sub>
+
+          {/* Hosting */}
+          <Sub title="Hosting durch Vercel">
+            <p>
+              Wir hosten unsere Website bei Vercel. Anbieter ist die Vercel Inc., 440 N Barranca
+              Ave #4133, Covina, CA 91723, USA. Vercel erfasst Server-Logfiles (IP-Adresse,
+              Browser-Typ etc.), um die Auslieferung der Seite technisch zu ermöglichen. Wir haben
+              mit Vercel einen Vertrag über Auftragsverarbeitung (Data Processing Addendum)
+              abgeschlossen.
+            </p>
+            <p>
+              Die Datenübertragung in die USA erfolgt auf Grundlage des EU-U.S. Data Privacy
+              Frameworks (DPF), da Vercel Inc. im DPF-Register eingetragen ist. Weitere
+              Informationen finden Sie in der Datenschutzerklärung von Vercel:{" "}
+              <a
+                href="https://vercel.com/legal/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                https://vercel.com/legal/privacy-policy
+              </a>
+              .
+            </p>
           </Sub>
 
           {/* Kontaktaufnahme */}
@@ -226,7 +285,7 @@ export default function DatenschutzPage() {
               </p>
             </SubSub>
             <SubSub title="Speicherdauer">
-              <p>Daten werden spätestens 1 Jahr nach Bearbeitung der Kontaktaufnahme gelöscht.</p>
+              <p>Daten werden spätestens 10 Jahre nach Bearbeitung der Kontaktaufnahme gelöscht.</p>
               <p>
                 Sofern es zu einem Vertragsverhältnis kommt, unterliegen wir den gesetzlichen
                 Aufbewahrungsfristen. Diese betragen grundsätzlich 6 oder 10 Jahre aus Gründen der
@@ -252,53 +311,74 @@ export default function DatenschutzPage() {
           <Sub title="Newsletter">
             <SubSub title="Art und Zweck der Verarbeitung">
               <p>
-                Für die Zustellung unseres Newsletters bzw. vergleichbarer Informationen erheben
-                wir personenbezogene Daten, die über eine Eingabemaske an uns übermittelt werden.
+                Wir betreiben einen E-Mail-Benachrichtigungsdienst, der Sie informiert, sobald neue
+                Sperrmülltermine im Landkreis Lüneburg veröffentlicht werden. Für die Zustellung
+                erheben wir Ihre E-Mail-Adresse über ein Anmeldeformular.
               </p>
               <p>
                 Für eine wirksame Registrierung benötigen wir eine valide E-Mail-Adresse. Um zu
                 überprüfen, dass eine Anmeldung tatsächlich durch den Inhaber einer E-Mail-Adresse
                 erfolgt, setzen wir das Double-Opt-in-Verfahren ein. Hierzu protokollieren wir die
                 Anmeldung zum Newsletter, den Versand einer Bestätigungsmail und den Eingang der
-                hiermit angeforderten Antwort. Weitere Daten werden nicht erhoben.
+                hiermit angeforderten Antwort.
               </p>
               <p>
-                Zum Zeitpunkt der Absendung des Anmeldeformulars werden zudem folgende Daten
-                gespeichert:
+                Zum Nachweis der Einwilligung speichern wir zusätzlich: IP-Adresse zum Zeitpunkt
+                der Anmeldung, Datum und Uhrzeit der Anmeldung sowie Datum und Uhrzeit der
+                Bestätigung.
               </p>
             </SubSub>
             <SubSub title="Rechtsgrundlage">
               <p>
                 Auf Grundlage Ihrer ausdrücklich erteilten Einwilligung (Art. 6 Abs. 1 lit. a
-                DSGVO), übersenden wir Ihnen regelmäßig unseren Newsletter bzw. vergleichbare
-                Informationen per E-Mail an Ihre angegebene E-Mail-Adresse.
+                DSGVO) übersenden wir Ihnen Benachrichtigungen per E-Mail an Ihre angegebene
+                E-Mail-Adresse.
               </p>
             </SubSub>
             <SubSub title="Empfänger">
               <p>
-                Wir setzen für den Versand einen Dienstleister ein, der als unser Auftragsverarbeiter
-                tätig wird.
+                Für den technischen Versand der E-Mails nutzen wir den SMTP-Dienst von Google (Gmail).
+                Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland
+                bzw. für den Datentransfer in die USA die Google LLC, 1600 Amphitheatre Parkway,
+                Mountain View, CA 94043, USA. Google verarbeitet dabei die E-Mail-Adressen der Empfänger
+                sowie den Inhalt der versandten E-Mails.
+              </p>
+            </SubSub>
+            <SubSub title="Drittlandtransfer">
+              <p>
+                Die Datenübertragung an Google LLC in die USA erfolgt auf Grundlage des EU-U.S. Data
+                Privacy Frameworks (DPF), da Google LLC im DPF-Register der U.S. Handelsministeriums
+                eingetragen ist. Weitere Informationen finden Sie in der Datenschutzerklärung von
+                Google:{" "}
+                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                  https://policies.google.com/privacy
+                </a>.
               </p>
             </SubSub>
             <SubSub title="Speicherdauer">
               <p>
-                Die Daten werden in diesem Zusammenhang nur verarbeitet, solange die entsprechende
-                Einwilligung vorliegt.
+                Ihre E-Mail-Adresse und die zugehörigen Anmeldedaten werden gespeichert, solange
+                Ihre Einwilligung vorliegt. Nach einem Widerruf bzw. einer Abmeldung werden Ihre
+                Daten innerhalb von 30 Tagen gelöscht, sofern keine gesetzlichen
+                Aufbewahrungspflichten entgegenstehen. Die zum Nachweis der Einwilligung
+                protokollierten Daten (IP-Adresse, Zeitstempel) können für einen darüber
+                hinausgehenden Zeitraum von bis zu 3 Jahren aufbewahrt werden, um die
+                Rechtmäßigkeit des Versands nachweisen zu können.
               </p>
             </SubSub>
             <SubSub title="Bereitstellung vorgeschrieben oder erforderlich">
               <p>
                 Die Bereitstellung Ihrer personenbezogenen Daten erfolgt freiwillig, allein auf
-                Basis Ihrer Einwilligung. Ohne bestehende Einwilligung können wir Ihnen unseren
-                Newsletter nicht zusenden.
+                Basis Ihrer Einwilligung. Ohne bestehende Einwilligung können wir Ihnen keine
+                Benachrichtigungen zusenden.
               </p>
             </SubSub>
             <SubSub title="Widerruf der Einwilligung">
               <p>
                 Die Einwilligung zur Speicherung Ihrer persönlichen Daten und ihrer Nutzung für den
-                Newsletterversand können Sie jederzeit mit Wirkung für die Zukunft widerrufen. Die
-                Abmeldung kann über den in jeder E-Mail enthaltenen Link oder in dieser
-                Datenschutzerklärung aufgeführten Kontaktinformationen beantragt werden.
+                Versand von Benachrichtigungen können Sie jederzeit mit Wirkung für die Zukunft
+                widerrufen. Die Abmeldung kann über den in jeder E-Mail enthaltenen
+                Abmeldelink oder über die oben aufgeführten Kontaktinformationen beantragt werden.
               </p>
             </SubSub>
           </Sub>
@@ -307,95 +387,177 @@ export default function DatenschutzPage() {
           <Sub title="Reichweitenmessung">
             <SubSub title="Art und Zweck der Verarbeitung">
               <p>
-                Die Reichweitenmessung dient der Auswertung der Besucherströme unseres
-                Onlineangebotes und kann Verhalten, Interessen oder demographische Informationen zu
-                den Besuchern, wie z.B. das Alter oder das Geschlecht, als pseudonyme Werte
-                umfassen. Mit Hilfe der Reichweitenanalyse können wir z.B. erkennen, zu welcher
-                Zeit unser Onlineangebot oder dessen Funktionen oder Inhalte am häufigsten genutzt
-                werden oder zur Wiederverwendung einladen. Ebenso können wir nachvollziehen, welche
-                Bereiche der Anpassung bedürfen.
+                Wir setzen Vercel Analytics ein, um die Nutzung unseres Webangebotes auszuwerten.
+                Dabei werden folgende Daten erhoben: aufgerufene Seiten (URL), Referrer-URL,
+                Gerätetyp (Desktop/Mobil), Betriebssystem, Browser-Typ sowie das Herkunftsland des
+                Besuchs (aus der IP-Adresse abgeleitet; die IP-Adresse selbst wird nicht
+                gespeichert). Es werden keine Cookies gesetzt. Die Daten werden pseudonymisiert
+                verarbeitet.
               </p>
-              <p>Welche Tools wir zur Reichweitenmessung einsetzen, finden Sie weiter unten.</p>
+              <p>
+                Vercel Analytics ruft dazu beim Seitenaufruf ein clientseitiges JavaScript ab, das
+                Informationen aus Ihrem Browser ausliest (z.B. Bildschirmauflösung, User-Agent,
+                Referrer). Dieser Zugriff auf Ihr Endgerät erfordert nach § 25 Abs. 1 TDDDG Ihre
+                Einwilligung, da er nicht für den technischen Betrieb der Website unbedingt
+                erforderlich ist.
+              </p>
             </SubSub>
             <SubSub title="Rechtsgrundlage">
               <p>
-                Die Verarbeitung erfolgt gemäß Art. 6 Abs. 1 lit. f DSGVO auf Basis unseres
-                berechtigten Interesses. Die Messung der Reichweite und die sich daraus ergebenden
-                Informationen sind geeignet, um das Webangebot anzupassen.
+                Der Zugriff auf Informationen in Ihrem Endgerät erfolgt gemäß § 25 Abs. 1 TDDDG
+                ausschließlich auf Grundlage Ihrer Einwilligung. Die anschließende Verarbeitung
+                der erhobenen Daten erfolgt gemäß Art. 6 Abs. 1 lit. a DSGVO auf Grundlage
+                derselben Einwilligung. Ihre Einwilligung können Sie jederzeit mit Wirkung für die
+                Zukunft widerrufen.
               </p>
             </SubSub>
             <SubSub title="Empfänger">
               <p>
-                Wir setzen für Betrieb und Wartung unserer Webseite technische Dienstleister ein,
-                die als unsere Auftragsverarbeiter tätig werden.
+                Empfänger der Daten ist Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723,
+                USA, die als Auftragsverarbeiter für uns tätig wird.
               </p>
             </SubSub>
             <SubSub title="Speicherdauer">
               <p>
-                Informationen zur Speicherdauer finden Sie in den unten aufgeführten Informationen
-                zu den eingesetzten Tools.
+                Die durch Vercel Analytics erhobenen Daten werden für maximal 30 Tage gespeichert.
               </p>
             </SubSub>
             <SubSub title="Drittlandtransfer">
-              <p>Die erhobenen Daten werden ggfs. in folgende Drittländer übertragen:</p>
-              <p className="font-medium text-gray-800">USA</p>
-              <p>Folgende Datenschutzgarantien liegen vor:</p>
+              <p>
+                Die Daten werden an Vercel Inc. in die USA übertragen. Die Übertragung erfolgt auf
+                Grundlage des EU-U.S. Data Privacy Frameworks (DPF), da Vercel Inc. im
+                DPF-Register eingetragen ist.
+              </p>
             </SubSub>
             <SubSub title="Bereitstellung vorgeschrieben oder erforderlich">
               <p>
                 Die Bereitstellung der Daten ist weder gesetzlich noch vertraglich vorgeschrieben.
+                Vercel Analytics wird nur nach Ihrer Einwilligung aktiviert.
               </p>
             </SubSub>
-            <SubSub title="Widerspruch">
+          </Sub>
+
+          {/* Geolocation */}
+          <Sub title="Standortbestimmung">
+            <SubSub title="Art und Zweck">
               <p>
-                Lesen Sie dazu die Informationen über Ihr Widerspruchsrecht nach Art. 21 DSGVO
-                weiter unten.
+                Auf Ihren ausdrücklichen Wunsch hin ermitteln wir Ihren aktuellen Standort, um
+                Ihnen Ihre Position auf der Sperrmüll-Karte anzuzeigen. Die Standortdaten werden
+                ausschließlich lokal in Ihrem Browser verarbeitet und nicht an unsere Server
+                übertragen oder gespeichert.
               </p>
             </SubSub>
-            <SubSub title="Eingesetzte Tools zur Reichweitenmessung">
-              <p className="font-semibold text-gray-800">Google Search Console und Vercel Analytics</p>
+            <SubSub title="Rechtsgrundlage">
+              <p>
+                Art. 6 Abs. 1 lit. a DSGVO (Einwilligung). Die Einwilligung erfolgt durch Ihre
+                aktive Bestätigung der Standortfreigabe im Browser.
+              </p>
+            </SubSub>
+            <SubSub title="Speicherdauer">
+              <p>
+                Die Standortdaten werden nicht gespeichert. Die Verarbeitung findet ausschließlich
+                für die Dauer der Sitzung im Browser statt.
+              </p>
+            </SubSub>
+            <SubSub title="Empfänger">
+              <p>Keine. Die Daten verlassen Ihren Browser nicht.</p>
+            </SubSub>
+          </Sub>
+
+          {/* OpenStreetMap */}
+          <Sub title="Einsatz von OpenStreetMap">
+            <SubSub title="Art und Zweck der Verarbeitung">
+              <p>
+                Wir binden die Landkarten des Dienstes &bdquo;OpenStreetMap&rdquo; ein, die auf
+                Grundlage der Open Data Commons Open Database License (ODbL) durch die
+                OpenStreetMap Foundation (OSMF) angeboten werden.
+              </p>
+              <p>
+                Damit Ihnen die Karte angezeigt werden kann, wird technisch bedingt Ihre
+                IP-Adresse an die Server der OpenStreetMap Foundation weitergeleitet.
+                Nach unserer Kenntnis werden die Daten der Nutzer durch OpenStreetMap
+                ausschließlich zu Zwecken der Darstellung der Kartenfunktionen und zur
+                Zwischenspeicherung der gewählten Einstellungen verwendet.
+              </p>
+            </SubSub>
+            <SubSub title="Rechtsgrundlage">
+              <p>
+                Die Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO.
+                Unser berechtigtes Interesse liegt in einer nutzerfreundlichen
+                Gestaltung unserer Website sowie der visuellen Darstellung der
+                Sperrmüll-Standorte im Landkreis Lüneburg.
+              </p>
+              <p>
+                Der Zugriff auf die Endeinrichtung des Nutzers, der beim Laden der Kartenkacheln
+                technisch stattfindet (Netzwerkanfrage mit IP-Übermittlung), ist gemäß § 25 Abs. 2
+                Nr. 2 TDDDG einwilligungsfrei, da er unbedingt erforderlich ist, um den vom Nutzer
+                ausdrücklich gewünschten Dienst – die Darstellung der interaktiven
+                Sperrmüll-Karte – zu erbringen.
+              </p>
+            </SubSub>
+            <SubSub title="Empfänger">
+              <p>
+                Empfänger der Daten ist die OpenStreetMap Foundation (OSMF),
+                St John&apos;s Innovation Centre, Cowley Road, Cambridge, CB4 0WS,
+                United Kingdom.
+              </p>
+            </SubSub>
+            <SubSub title="Drittlandtransfer">
+              <p>
+                Das Vereinigte Königreich gilt aufgrund eines Angemessenheitsbeschlusses
+                der EU-Kommission als sicheres Drittland mit einem angemessenen
+                Datenschutzniveau.
+              </p>
             </SubSub>
           </Sub>
         </Section>
 
         {/* Widerspruchsrecht */}
-        <Section title="Information über Ihr Widerspruchsrecht nach Art. 21 DSGVO">
-          <Sub title="Einzelfallbezogenes Widerspruchsrecht">
-            <p>
-              Sie haben das Recht, aus Gründen, die sich aus Ihrer besonderen Situation ergeben,
-              jederzeit gegen die Verarbeitung Sie betreffender personenbezogener Daten, die
-              aufgrund Art. 6 Abs. 1 lit. f DSGVO (Datenverarbeitung auf der Grundlage einer
-              Interessenabwägung) erfolgt, Widerspruch einzulegen; dies gilt auch für ein auf diese
-              Bestimmung gestütztes Profiling im Sinne von Art. 4 Nr. 4 DSGVO.
-            </p>
-            <p>
-              Legen Sie Widerspruch ein, werden wir Ihre personenbezogenen Daten nicht mehr
-              verarbeiten, es sei denn, wir können zwingende schutzwürdige Gründe für die
-              Verarbeitung nachweisen, die Ihre Interessen, Rechte und Freiheiten überwiegen, oder
-              die Verarbeitung dient der Geltendmachung, Ausübung oder Verteidigung von
-              Rechtsansprüchen.
-            </p>
-          </Sub>
-          <Sub title="Empfänger eines Widerspruchs">
-            <address className="not-italic">
-              <p className="font-semibold text-gray-900">Leon Jamie Kraim</p>
-              <p>
-                <a href="tel:+4915906117790" className="hover:text-blue-600 hover:underline">
-                  015906117790
-                </a>
+        <section className="mb-6 rounded-xl border-2 border-gray-800 bg-white p-6 shadow-sm sm:p-8">
+          <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-gray-400">
+            Information über Ihr Widerspruchsrecht nach Art. 21 DSGVO
+          </h2>
+          <div className="space-y-3 text-gray-700 text-sm leading-relaxed">
+            <div className="rounded-lg bg-gray-50 border border-gray-200 p-4">
+              <p className="font-semibold text-gray-900 mb-2">
+                ⚠ Wichtiger Hinweis – Bitte gesondert beachten
               </p>
               <p>
-                <a
-                  href="mailto:offleon.kraim.bus+contact@gmail.com"
-                  className="break-all hover:text-blue-600 hover:underline"
-                >
-                  offleon.kraim.bus+contact@gmail.com
-                </a>
+                Sie haben das Recht, aus Gründen, die sich aus Ihrer besonderen Situation ergeben,
+                jederzeit gegen die Verarbeitung Sie betreffender personenbezogener Daten, die
+                aufgrund Art. 6 Abs. 1 lit. f DSGVO (Datenverarbeitung auf der Grundlage einer
+                Interessenabwägung) erfolgt, Widerspruch einzulegen; dies gilt auch für ein auf
+                diese Bestimmung gestütztes Profiling im Sinne von Art. 4 Nr. 4 DSGVO.
               </p>
-              <p>Ringstraße 25, 21339 Lüneburg</p>
-            </address>
-          </Sub>
-        </Section>
+              <p className="mt-2">
+                Legen Sie Widerspruch ein, werden wir Ihre personenbezogenen Daten nicht mehr
+                verarbeiten, es sei denn, wir können zwingende schutzwürdige Gründe für die
+                Verarbeitung nachweisen, die Ihre Interessen, Rechte und Freiheiten überwiegen,
+                oder die Verarbeitung dient der Geltendmachung, Ausübung oder Verteidigung von
+                Rechtsansprüchen.
+              </p>
+            </div>
+            <Sub title="Empfänger eines Widerspruchs">
+              <address className="not-italic">
+                <p className="font-semibold text-gray-900">Leon Jamie Kraim</p>
+                <p>
+                  <a href="tel:+4915906117790" className="hover:text-blue-600 hover:underline">
+                    015906117790
+                  </a>
+                </p>
+                <p>
+                  <a
+                    href="mailto:offleon.kraim.bus+contact@gmail.com"
+                    className="break-all hover:text-blue-600 hover:underline"
+                  >
+                    offleon.kraim.bus+contact@gmail.com
+                  </a>
+                </p>
+                <p>Ringstraße 25, 21339 Lüneburg</p>
+              </address>
+            </Sub>
+          </div>
+        </section>
 
         {/* Änderungen */}
         <Section title="Änderung unserer Datenschutzerklärung">
