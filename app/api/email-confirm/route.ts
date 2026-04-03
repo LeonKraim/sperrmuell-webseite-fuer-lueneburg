@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { confirmEmailSub } from "@/lib/emailSubscriptions";
+import { getClientIp } from "@/lib/rateLimit";
 
 function htmlPage(title: string, heading: string, body: string, ok: boolean): NextResponse {
   const color = ok ? "#16a34a" : "#dc2626";
@@ -34,7 +35,8 @@ export async function GET(request: NextRequest) {
     return htmlPage("Fehler", "Ungültiger Link", "Der Bestätigungslink ist ungültig oder abgelaufen.", false);
   }
 
-  const confirmed = await confirmEmailSub(token);
+  const ip = getClientIp(request);
+  const confirmed = await confirmEmailSub(token, ip);
   if (!confirmed) {
     return htmlPage("Fehler", "Link abgelaufen", "Dieser Bestätigungslink ist ungültig oder bereits verwendet.", false);
   }

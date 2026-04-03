@@ -8,6 +8,9 @@ export interface EmailSubscriber {
   confirmed: boolean;
   token: string;
   createdAt: string;
+  signupIp: string;
+  confirmedAt?: string;
+  confirmIp?: string;
 }
 
 async function readEmailSubs(): Promise<EmailSubscriber[]> {
@@ -32,7 +35,7 @@ async function writeEmailSubs(subs: EmailSubscriber[]): Promise<void> {
   });
 }
 
-export async function addEmailSub(email: string): Promise<string> {
+export async function addEmailSub(email: string, signupIp: string): Promise<string> {
   const subs = await readEmailSubs();
   const existing = subs.find((s) => s.email === email);
   if (existing) {
@@ -40,16 +43,18 @@ export async function addEmailSub(email: string): Promise<string> {
     return existing.token;
   }
   const token = randomBytes(32).toString("hex");
-  subs.push({ email, confirmed: false, token, createdAt: new Date().toISOString() });
+  subs.push({ email, confirmed: false, token, createdAt: new Date().toISOString(), signupIp });
   await writeEmailSubs(subs);
   return token;
 }
 
-export async function confirmEmailSub(token: string): Promise<boolean> {
+export async function confirmEmailSub(token: string, confirmIp: string): Promise<boolean> {
   const subs = await readEmailSubs();
   const idx = subs.findIndex((s) => s.token === token);
   if (idx === -1) return false;
   subs[idx].confirmed = true;
+  subs[idx].confirmedAt = new Date().toISOString();
+  subs[idx].confirmIp = confirmIp;
   await writeEmailSubs(subs);
   return true;
 }

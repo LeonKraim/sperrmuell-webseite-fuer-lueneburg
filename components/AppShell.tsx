@@ -259,17 +259,35 @@ export default function AppShell() {
             isMobile={isMobile}
           />
           
-          {/* Credit Link */}
-          <a
-            href="https://github.com/LeonKraim"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="fixed left-4 z-[1200] rounded-lg bg-white/90 px-3 py-1.5 text-sm font-medium text-gray-700 shadow-md transition-[bottom,background-color] duration-300 hover:bg-white md:bottom-4"
+          {/* Credit + Impressum Links */}
+          <div
+            className="fixed left-4 z-[1200] flex items-center gap-2 transition-[bottom] duration-300 md:bottom-4"
             style={isMobile ? { bottom: `calc(${mobilePanelHeight} + 1vh)` } : undefined}
-            title="Made by Leon Kraim"
           >
-            Made by Leon Kraim
-          </a>
+            <a
+              href="https://github.com/LeonKraim"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg bg-white/90 px-3 py-1.5 text-sm font-medium text-gray-700 shadow-md transition-colors hover:bg-white"
+              title="Made by Leon Kraim"
+            >
+              Made by Leon Kraim
+            </a>
+            <a
+              href="/impressum"
+              className="rounded-lg bg-white/90 px-3 py-1.5 text-sm font-medium text-gray-700 shadow-md transition-colors hover:bg-white"
+              title="Impressum"
+            >
+              Impressum
+            </a>
+            <a
+              href="/datenschutz"
+              className="rounded-lg bg-white/90 px-3 py-1.5 text-sm font-medium text-gray-700 shadow-md transition-colors hover:bg-white"
+              title="Datenschutzerklärung"
+            >
+              Datenschutz
+            </a>
+          </div>
         </div>
 
         {/* Right Ad */}

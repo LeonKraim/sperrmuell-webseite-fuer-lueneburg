@@ -33,6 +33,10 @@ export function buildConfirmationEmail(
         <tr><td style="padding:16px 32px;border-top:1px solid #e5e7eb;background:#f9fafb">
           <p style="margin:0;color:#9ca3af;font-size:11px">
             <a href="${unsubscribeUrl}" style="color:#9ca3af">Abmelden</a>
+            &nbsp;·&nbsp;
+            <a href="${baseUrl}/impressum" style="color:#9ca3af">Impressum</a>
+            &nbsp;·&nbsp;
+            <a href="${baseUrl}/datenschutz" style="color:#9ca3af">Datenschutz</a>
           </p>
         </td></tr>
       </table>
@@ -79,6 +83,10 @@ export function buildNotificationEmail(
           <p style="margin:0;color:#9ca3af;font-size:11px">
             Du erhälst diese E-Mail weil du dich für Sperrmüll-Erinnerungen angemeldet hast. &nbsp;·&nbsp;
             <a href="${unsubscribeUrl}" style="color:#9ca3af">Abmelden</a>
+            &nbsp;·&nbsp;
+            <a href="${siteUrl}/impressum" style="color:#9ca3af">Impressum</a>
+            &nbsp;·&nbsp;
+            <a href="${siteUrl}/datenschutz" style="color:#9ca3af">Datenschutz</a>
           </p>
         </td></tr>
       </table>

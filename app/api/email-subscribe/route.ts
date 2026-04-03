@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     config.productionUrl;
 
   try {
-    const token = await addEmailSub(email);
+    const token = await addEmailSub(email, ip);
     const { subject, html } = buildConfirmationEmail(token, baseUrl);
     await sendEmail(email, subject, html);
     logger.info("Email confirmation sent", { email: email.slice(0, 4) + "***" });
