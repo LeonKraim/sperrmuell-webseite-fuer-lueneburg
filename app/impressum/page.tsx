@@ -88,9 +88,12 @@ export default function ImpressumPage() {
           <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-gray-400">
             Umsatzsteuer
           </h2>
-          <p className="text-gray-700">
-            Kleinunternehmer gemäß § 19 UStG
-          </p>
+          <dl className="space-y-3">
+            <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-4">
+              <dt className="w-48 flex-shrink-0 text-sm font-medium text-gray-500">USt-IdNr.</dt>
+              <dd className="text-gray-900">DE460644990</dd>
+            </div>
+          </dl>
         </section>
 
         {/* Streitschlichtung */}
