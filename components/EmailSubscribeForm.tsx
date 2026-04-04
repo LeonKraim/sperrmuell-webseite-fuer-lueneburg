@@ -10,6 +10,7 @@ export default function EmailSubscribeForm() {
   const [formState, setFormState] = useState<FormState>("idle");
   const [email, setEmail] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [consentChecked, setConsentChecked] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
 
@@ -19,10 +20,15 @@ export default function EmailSubscribeForm() {
     }
   }, [open]);
 
+  const handleClose = () => {
+    setOpen(false);
+    setConsentChecked(false);
+  };
+
   // Close on backdrop click
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (dialogRef.current && !dialogRef.current.contains(e.target as Node)) {
-      setOpen(false);
+      handleClose();
     }
   };
 
@@ -88,7 +94,7 @@ export default function EmailSubscribeForm() {
                 </h2>
               </div>
               <button
-                onClick={() => setOpen(false)}
+                onClick={handleClose}
                 className="rounded p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
                 aria-label="Schließen"
               >
@@ -106,7 +112,7 @@ export default function EmailSubscribeForm() {
                 <p className="text-base font-semibold text-red-600">Bitte überprüfe auch deinen Spam-Ordner.</p>
 
                 <button
-                  onClick={() => setOpen(false)}
+                  onClick={handleClose}
                   className="mt-2 rounded-lg border border-gray-200 px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50"
                 >
                   Schließen
@@ -130,9 +136,30 @@ export default function EmailSubscribeForm() {
                 {formState === "error" && (
                   <p className="mb-2 text-xs text-red-600">{errorMsg}</p>
                 )}
+                <div className="mb-3 flex items-start gap-2">
+                  <input
+                    id="consent"
+                    type="checkbox"
+                    checked={consentChecked}
+                    onChange={(e) => setConsentChecked(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 shrink-0 accent-blue-600"
+                    required
+                  />
+                  <label htmlFor="consent" className="text-xs text-gray-500 leading-relaxed">
+                    Ich stimme zu, dass meine E-Mail-Adresse zur Zusendung von Sperrmüll-Erinnerungen gespeichert wird.{" "}
+                    <a
+                      href="/datenschutz"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline text-blue-600 hover:text-blue-800"
+                    >
+                      Datenschutzerklärung
+                    </a>
+                  </label>
+                </div>
                 <button
                   type="submit"
-                  disabled={formState === "loading"}
+                  disabled={formState === "loading" || !consentChecked}
                   className="flex w-full items-center justify-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 transition-colors hover:bg-blue-100 disabled:opacity-60"
                 >
                   {formState === "loading" ? (
