@@ -146,7 +146,7 @@ export default function EmailSubscribeForm() {
                     required
                   />
                   <label htmlFor="consent" className="text-xs text-gray-500 leading-relaxed">
-                    Ich stimme zu, dass meine E-Mail-Adresse zur Zusendung von Sperrmüll-Erinnerungen gespeichert wird.{" "}
+                    Ich stimme zu, dass meine E-Mail-Adresse zur Zusendung von Sperrmüll-Erinnerungen gespeichert wird. Diese Einwilligung kann ich jederzeit mit Wirkung für die Zukunft widerrufen.{" "}
                     <a
                       href="/datenschutz"
                       target="_blank"
